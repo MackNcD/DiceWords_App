@@ -37,7 +37,7 @@ symbol_A = '#D6D9E0'
 faded_text_A = '#A2A9B9'
 faded_text_B = '#8891A5'
 color_text_C = '#A2A9B9'
-
+outer_bg_A = '#16181D'
 
 
 
