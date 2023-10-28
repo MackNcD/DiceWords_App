@@ -1,0 +1,1 @@
+Input your sentence here, it will be an ``adjective`` input, surely.
