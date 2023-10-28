@@ -2,11 +2,11 @@ Phoenix Feather`pg`sf`fa
 Bioluminescent Mushroom`pg`f`nt
 Solar Sailboat`g`f`sc
 Ancient Relic`e`f`hi
-Steampunk Goggles`m`sf`tk
+Steampunk Goggles`m`sf`te
 Ghostly Lantern`pg`f`ho
 Quantum Elixir`e`f`sc
 Celestial Harp`e`f`fa
-Mechanical Wings`e`sf`tk
+Mechanical Wings`e`sf`te
 Toxic Ooze`m`sf`sc
 Lost World Map`e`f`ad
 Magic Wand`g`nf`fa
