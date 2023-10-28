@@ -1,0 +1,83 @@
+A word surrounded by double code demarcation symbols (``) is called a placeholder, or in theme of the program, a "DiceWord"
+The output, are potentials.
+
+Example:
+
+Input:
+``pronoun`` was reading an ``noun``
+Output:
+I was read an instruction manual
+
+The DiceWord itself from which potentials from is a .txt file, within a directory [assets->dicewords->YOUR_DIRECTORY_HERE] and each line of the .txt file is another one of these potential words.
+
+
+DiceWord potentials each have a 3-4 part parametrical code following them.
+This is the DiceWord's PIP, or Partitioned Indication of Parameters, [named that because pips are the little dots on dice]
+
+The words will look something like this:
+
+word`g`f`nt
+
+You don't necessarily need the codes at the end of your words, but if you add them, they must have all three categories, in this arrangement:
+(word),(maturity level),(realism level),(genre)
+
+Optionally, a second genre can be tacked on. More on that below.
+This strictness may be loosened in a later update.
+
+Within the app, the first two settings (maturity/realism) are set by sliders, the last, genre, is set by a series of switches.
+If you're only interested in assigning a genre, or a pair of genres, you can pass the first two parameters through as (E) which means those sliders have no basis on your parameters.
+
+Code bank:
+
+Part 1: Maturity Levels
+E = 0-100
+G = 0-50
+PG = 10-85
+M = 35-100
+R = 65-100
+X = 70-100 (With each additional X increasing the minimum by 10, up to three.)
+
+Part 2: Realism Levels
+E = 0-100
+NF (Non-fiction) = 0-55
+SF (Soft Fiction) = 10-85
+F (Fiction) = 45-100
+
+Notice that there is great overlap in levels, these parameters are generally loose except at the extremes.
+
+Part 3: Primary Genre
+SC = Science Fiction
+FA = Fantasy
+HI = Historical
+AD = Action/Adventure
+MY = Mystery
+RO = Love/Romance
+CO = Comedy
+MO = Modern/Basic
+SR = Surreal
+TK = Tech
+NT = Nature
+HO = Dark/Horrific
+
+More than one genre can be turned on at a time to mix things up.
+
+Part 4: Secondary Genre
+(List of possible PIPs are the same as part 3)
+
+How the first and second genre's influence is calculated on results:
+
+
+If there's a second genre listed in the diceword faces' parameter index, *and* this secondary genre has not been chosen by the user the secondary genre can potentially be disqualifying, with a 25% chance of doing so. So the primary genre more often than not has the weight of influence.
+
+If secondary genre is matched to the user's selection but it's primary is not, it will have a coin-flip, 50/50 odds, of passing through the parametrical gates.
+
+
+Selecting "Choose by paired genres" Will eliminate all single genre diceface from the polyhedral diceword. (Currently not implemented in version 1.0.0)
+
+
+
+Don't forget that DiceWords can also be just be parts of words, to create fantasy words, and can also be entire phrases. However you want to customize the folders and their .txt files, is up to you. Just don't expect everything to make it into the default version if you send me the ideas -- it's important to keep things both plentiful and yet basic for a new user. But please send any changes, regardless.
+
+If you like my platform please buy me a cup of coffee, I'm saving up for a new RAM stick so I can make programs like this -- more complex.
+
+Everything else can be figured out on your own -- please send any questions you have for me and I'll create a FAQ if certain things aren't clear. Experimenting should clear *most* things up. 

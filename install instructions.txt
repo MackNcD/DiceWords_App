@@ -1,0 +1,24 @@
+Make sure you have Python 3.10+
+(3.10.7 or higher should ensure everything works, but 3.10 in general should work)
+
+
+Open the main DiceWords folder (the highest level of the whole file)
+
+Right click, then select "open in terminal" on that folder area.
+
+Create a python virtual environment
+Write:
+
+Python -m venv .venv
+
+Hit enter.
+Then write:
+
+.venv\Scripts\activate
+
+This will open the new virtual environment.
+
+Then write:
+pip install -r requirements.txt
+
+This will install the dependancies. Then you can open main.py and run it in windows studio code.
