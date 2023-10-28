@@ -18,6 +18,11 @@ import threading
 import locale
 locale.setlocale(locale.LC_NUMERIC, 'C') #To fix the customtkinter bugs
 
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import queue
+import json
+
 font_A = () 
 
 #color code
@@ -48,9 +53,6 @@ symbol_A = '#D6D9E0'
 faded_text_A = '#A2A9B9'
 faded_text_B = '#8891A5'
 color_text_C = '#A2A9B9'
-
-
-
 
 #----------------------------Save format/gen section----------------------------------
 
@@ -721,14 +723,14 @@ def generate_new_sentence():
         change_color_command()  
         save_settings_to_file()
         save_template_to_file()
+    return new_sentence
     
 thread1 = threading.Thread(target=generate_new_sentence) #this puts this task on a diff thread
 thread1.start() #and causes it not to create delay (rotating cursor) in the main GUI
     
 # Function to generate multiple sentences
 def generate_multiple_sentences(times):
-    for _ in range(times):
-        generate_new_sentence()
+    return [generate_new_sentence() for _ in range(times)]
 
 thread2 = threading.Thread(target=generate_multiple_sentences) #this puts this task on a diff thread
 thread2.start() #and causes it not to create delay (rotating cursor) in the main GUI
@@ -1822,6 +1824,10 @@ class OutputRedirector:
         self.text_widget.see(tk.END)  # Scroll to the end
         if self.redirect_to:
             self.redirect_to.write(text)
+    
+    #Adds a flush function so flash don't go bonkers
+    def flush(self):
+        pass
 
 # Redirect stdout and stderr
 output_redirector = OutputRedirector(out_text_cmd, sys.stdout)
@@ -1846,7 +1852,8 @@ link_label.place(x=920, y=720)
 # Bind a click event to open the link when clicked
 link_label.bind("<Button-1>", open_link)
 
-app.mainloop()
+
+
 
 #----------------------------------------------------------------------------------------
 
@@ -1854,6 +1861,45 @@ app.mainloop()
 
 
 
+#---------API PART
+api = Flask("DiceWords - API")
+@api.route('/api/gen', methods=['POST'])
+def api_gen():
+    common_data = request.json
+    if common_data is None:
+        return jsonify({'error': 'Invalid request data'}), 400
+    text = common_data.get('text', '')
+    if text is None:
+        return jsonify({'error': 'Invalid request data'}), 400
+    count = int(common_data.get('count', 1))
+    if count is None:
+        return jsonify({'error': 'Invalid request data'}), 400
+    if count > 100:
+        return jsonify({'error': 'Count must be less than 100'}), 400
+    if count < 1:
+        return jsonify({'error': 'Count must be greater than 0'}), 400
+    entry.delete('1.0', tk.END)
+    entry.insert(ttk.END, text)
+    result = generate_multiple_sentences(count)
+    return jsonify({'result': result}), 200
+
+def api_run():
+    CORS(api)
+    api.run(host="0.0.0.0", debug=False, port=7862, use_reloader=False) #use_reloader=False
+
+api_thread = threading.Thread(target=api_run, daemon=True)
+api_thread.start()
+
+
+
+
+
+
+
+
+
+
+app.mainloop()
 
 
 
@@ -1888,29 +1934,6 @@ output_switch_label.place(relx=0.937, rely=0.92)
 
 output_switch = ttk.Radiobutton(app, background=panel_A, variable=save_output_state, command=toggle_save_output)
 output_switch.place(relx=0.914, rely=0.92)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
