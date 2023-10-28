@@ -1,3 +1,8 @@
+Update 10/28/23:
+An install batch file has been added, in most cases it should take care of everything, and the app will be good to go.
+
+If not:
+
 Make sure you have Python 3.10+
 (3.10.7 or higher should ensure everything works, but 3.10 in general should work)
 
