@@ -15,6 +15,8 @@ import sys
 import webbrowser
 import time
 import threading
+import locale
+locale.setlocale(locale.LC_NUMERIC, 'C') #To fix the customtkinter bugs
 
 font_A = () 
 
