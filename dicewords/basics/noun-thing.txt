@@ -1,30 +1,4 @@
-Hole In The Ground`e`e`sr
-Echo`e`e`sr
-Kaleidoscope`e`e`sr
-Paradoxical Object`e`sf`sr
-Never-ending Staircase`e`f`sr
-Impossible Object`e`f`sr
-Handful Of Ether`e`sf`sr
-Painting Coming To life`e`f`sr
-Fractals of Light Restructuring Themselves`e`f`sr
-Reflection`e`nf`sr
-Mirage`e`nf`sr
-Whirlpool Of Air`e`sf`sr
-Thoughtform Growing Into Reality`e`sf`sr
-A Solidified Boathorn Sound`e`f`sr
-Time-Warped Object`e`f`sr
-An Animal Evolving Before The Eyes`e`sf`sr
-A Thought Sculpture`e`sf`sr
-Living Paint Expressing Itself In 3D Forms`e`sf`sr
-
-Robotic Arm`e`e`te`sc
-
-Robotic Arm Giving The Finger`r`e`co`te
-
-Electromagnetic Coil`e`e`te
-Living AI Chatbot`e`e`te
 Circuit`e`e`te
-
 Sword Of Charlamagne`m`nf`hi`ad
 Rosetta Stone`m`nf`hi
 Ark of the Covenant`m`nf`hi
@@ -33,8 +7,6 @@ Mona Lisa`m`nf`hi
 Magna Carta`m`nf`hi
 Declaration of Independence`m`nf`hi
 Gutenberg Bible`m`nf`hi
-
-
 Statue of Liberty`pg`nf`hi`mo
 Terracotta Army`pg`nf`hi
 Dead Sea Scrolls`pg`nf`hi
@@ -53,14 +25,9 @@ The Liberty Bell Before It Was Cracked`pg`f`hi
 The Crown of Louis XV`pg`nf`hi
 The Dare Stone`pg`nf`hi
 Musket`m`nf`hi
-
-
-
 Lightbulb`pg`nf`hi
-
 Radio Antenna`pg`nf`hi
 Typewriter`pg`nf`hi
-
 Dictaphone`pg`nf`hi`te
 Sewing Machine`pg`nf`hi`te
 Steam Engine Train`pg`nf`hi
@@ -78,9 +45,7 @@ Water Wheel`pg`nf`hi
 Chariot`pg`nf`hi
 Oil Lamp`pg`nf`hi
 Abacus`pg`nf`hi
-
 A Pegleg From A Pirate`pg`nf`co`hi
-
 Sword`pg`nf`hi`ad
 Dagger`pg`nf`ad`hi
 Bow`pg`nf`hi`ad
@@ -110,7 +75,6 @@ War Horn`pg`nf`hi`ad
 Blowtorch`pg`nf`ad`mo
 Catapult`pg`nf`hi`ad
 Trident`pg`nf`hi`ad
-
 Nanocrystal`e`e`te`sc
 Gear`e`nf`te
 Spring`e`nf`te
@@ -141,8 +105,6 @@ Washing Machine`e`nf`te
 Bicycle`e`nf`mo
 Camera`e`nf`te`my
 Telephone`e`nf`te
-
-
 Database`e`nf`te`mo
 Microchip`e`nf`te`mo
 Contraption`e`nf`te`mo
@@ -153,8 +115,6 @@ Antenna`e`nf`te`mo
 Radar`e`nf`te`mo
 Battery`e`nf`te`mo
 Motor`e`nf`te`mo
-
-
 Spaceship`e`f`sc
 Teleporter`e`f`sc
 Cybersuit`e`f`sc
@@ -295,21 +255,12 @@ Ransom Note`e`nf`my
 Surveillance Camera`e`nf`my
 Time Bomb`e`e`my
 Thug`e`nf`my
-Bondage Gear`r`nf`ro
-Dildo`x`nf`ro
-Erotic Novel`r`nf`ro
-Kama Sutra Position`xx`nf`ro
 Love Letter`m`nf`ro
 Lubricant`r`nf`ro
-Massager`e`e`ro
 Mirror`e`e`ro
-Pornography`xx`e`ro
 Rope`r`e`ro
-Sex Toy`r`e`ro
-Vibrator`r`nf`ro
 Wedding Ring`r`nf`ro
 Whip`r`nf`ro
-X-rated Movie`xx`nf`ro
 Zipper`m`nf`ro
 Raft`e`e`ad
 Survival Kit`e`e`ad
@@ -360,23 +311,31 @@ Fire Hydrant`e`e`co
 Giant Pacman`e`e`co
 Jumping Jack`e`e`co
 Ketchup And Mustard`e`e`co
-Anal Probe`xx`e`sc
-Blowup Doll`xx`e`co
-Dildo Collection In A Briefcase`xx`e`co
+Hole In The Ground`e`e`sr
+Echo`e`e`sr
+Kaleidoscope`e`e`sr
+Paradoxical Object`e`sf`sr
+Never-ending Staircase`e`f`sr
+Impossible Object`e`f`sr
+Handful Of Ether`e`sf`sr
+Painting Coming To life`e`f`sr
+Fractals of Light Restructuring Themselves`e`f`sr
+Reflection`e`nf`sr
+Mirage`e`nf`sr
+Whirlpool Of Air`e`sf`sr
+Thoughtform Growing Into Reality`e`sf`sr
+A Solidified Boathorn Sound`e`f`sr
+Time-Warped Object`e`f`sr
+An Animal Evolving Before The Eyes`e`sf`sr
+A Thought Sculpture`e`sf`sr
+Living Paint Expressing Itself In 3D Forms`e`sf`sr
+Robotic Arm`e`e`te`sc
+Robotic Arm Giving The Finger`r`e`co`te
+Electromagnetic Coil`e`e`te
+Living AI Chatbot`e`e`te
+Anal Probe`xx`e`sc`co
 Fart Machine`pg`e`co
-Gigantic Dismembered Penis`xx`e`co
-Gigolo Action-Figure`xxx`e`co
 Nymphomaniac`xxx`e`e
-Pregnant Teenager`xxx`e`e
-Sex Toy Shop`xxx`e`co
-Transsexual Prostitute`xxx`e`co
-Uncircumcised Turtle-Neck Shirt`xxx`e`co
 A Set Of Rubber Tits`xxx`e`co
 A Woman's Ass`xxx`e`co
 A Single Anal Bead`xxx`e`co
-Crotch-Region Tattoo`xxx`e`co
-Dirty Sanchez`x`e`co
-Double Anal Sex Pin-Up`xxx`e`co
-Gang Bang`xxx`e`co
-Golden Shower`xxx`e`co
-Hardcore Porn VHS`xxx`e`e

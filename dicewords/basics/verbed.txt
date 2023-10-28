@@ -1,29 +1,3 @@
-Vaporized
-Decoded
-Teleported
-Transformed
-Infiltrated
-Rebooted
-Reconstructed
-Evolved
-Vanished
-Disassembled
-
-
-Cybernetically Enhanced`e`f`sc`te
-Genetically Modified`e`e`sc`te
-Quantum Teleported`e`f`sc
-Time Traveled to`e`e`sc
-Dimension Hopped With`e`f`sc
-Mind Mapped`e`e`sc
-Memory Erased`e`e`sc
-Nanotechnologically Augmented`e`f`sc
-Roboticized`e`e`sc
-Biogenetically Engineered`e`f`sc
-Simulated`e`e`sc
-Had Cryogenically Frozen`e`f`sc
-Alien Contacted`e`sf`sc
-DNA Manipulated`e`w`sc`te
 Cloned
 Infected
 Phased
@@ -96,17 +70,36 @@ Shaken
 Stirred
 Thrilled
 
-Enchanted
-Captivated
-Entranced
-Fascinated
-Lured
-Seduced
-Swooned
-Seduced
-Aroused
-
-
+Enchanted`m`e`ro`fa
+Captivated`m`e`ro`fa
+Entranced`m`e`ro`fa
+Fascinated`m`e`ro`te
+Lured`m`e`ro`my
+Seduced`xxx`nf`ro
+Vaporized`e`f`sc`te
+Decoded`e`f`my`te
+Teleported`e`f`sc`te
+Transformed`e`f`sc`fa
+Infiltrated`e`f`ad`my
+Rebooted`e`f`sc`te
+Reconstructed`e`f`te`hi
+Evolved`e`f`sc`te
+Vanished`e`f`sc`my
+Disassembled`e`f`sc`te
+Cybernetically Enhanced`e`f`sc`te
+Genetically Modified`e`e`sc`te
+Quantum Teleported`e`f`sc
+Time Traveled to`e`e`sc
+Dimension Hopped With`e`f`sc
+Mind Mapped`e`e`sc
+Memory Erased`e`e`sc
+Nanotechnologically Augmented`e`f`sc
+Roboticized`e`e`sc
+Biogenetically Engineered`e`f`sc
+Simulated`e`e`sc
+Had Cryogenically Frozen`e`f`sc
+Alien Contacted`e`sf`sc
+DNA Manipulated`e`w`sc`te
 Grabbed`e`e`e
 Teleported to`e`f`sc
 Hacked into`e`e`sc
@@ -159,19 +152,8 @@ Entwined with
 Cuddled`e`e`ro
 Yearned for`e`e`ro
 Surrendered to`e`e`ro
-Made Out With`m`e`ro
-Sucked On`x`e`ro
-Whipped`m`e`ro
-Licked`m`e`ro
-Ate Out`xx`e`ro
-Made Love To`xx`e`ro
-Fucked`xxx`e`e
-Raped`xxx`e`e
-Flashed`xxx`e`e
-Motor-boated`xx`e`ro
+Made Out With`x`e`ro
 Bit`r`e`e
-Fondled`m`e`ro
-Tongue-Bathed`r`e`ro
 Haunted`e`e`ho
 Terrified`e`e`ho
 Tormented`r`e`ho
@@ -185,7 +167,6 @@ Murdered`r`e`ho
 Shocked`pg`e`ho
 Bloodied`m`e`ho
 Cooked`r`e`e
-Ripped Naked`r`e`e
 Pursued`g`e`ho
 Ambushed`g`e`ho
 Investigated`g`e`my
@@ -208,7 +189,6 @@ Fortified`g`e`hi
 Rebelled Against`e`e`hi
 Sabotaged`e`e`hi
 Reigned Over`e`e`hi
-Flourished During The Time Of The`x`f`hi
 Explored`e`e`ad
 Treked Over`e`e`ad
 Survived`e`e`ad

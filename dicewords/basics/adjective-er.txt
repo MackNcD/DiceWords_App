@@ -9,75 +9,62 @@ Lighter
 Riskier
 Wilder
 Stranger
-Fantasy:
-Dreamier
-More Mystical
-More Enchanting
-More Whimsical
-Sparklier
-More Ethereal
-More Otherworldly
-More Elven
-Fairer
-More Magical
-Mystery:
-Creepier
-Darker
-Spookier
-Stranger
-Stickier
-More Mysterious
-More Shadowy
-Uncannier
-More Cryptic
-Romance:
-Lovelier
-Dreamier
-Heartier
-Sweeter
-More Intimate
-More Loving
-Deeper
-More Smiley
-Horror:
-Scarier
-Bloodier
-Creepier
-Grimmer
-Darker
-More Gloomy
-More Eerie
-Thriller:
-Spookier
-Riskier
-Edgier
-Scarier
-Deadlier
-More Heart-pounding
-More Ominous
-More Intense
-Grippier
-Historical Fiction:
-Prettier
-More Historic
-More Nostalgic
-More Old-fashioned
-More Periodic
-More Authentice
-More Vintage
-More Antique
-More Classical
-More Colonial
-More Retro
-Daintier
-Adventure:
-Wilder
-Braver
-Riskier
-More Explorative
-More Daring
-More Rugged
-More Adventurous
-More Tame
-More Lively
-More Off-road
+Dreamier`e`e`fa
+More Mystical`e`e`fa
+More Enchanting`e`e`fa
+More Whimsical`e`e`fa
+Sparklier`e`e`fa
+More Ethereal`e`e`fa
+More Otherworldly`e`e`fa
+More Elven`e`e`fa
+Fairer`e`e`fa
+More Magical`e`e`fa
+Darker`e`e`ho`my
+Spookier`e`e`ho`my
+Stranger`e`e`my`sr
+More Mysterious`e`e`ho
+More Shadowy`e`e`ho`my
+Uncannier`e`e`ho`my
+Lovelier`e`e`ro
+Dreamier`e`e`ro`sr
+Heartier`e`e`ro
+Sweeter`e`e`ro
+More Intimate`e`e`ro
+More Loving`e`e`ro
+Deeper`e`e`ro`sc
+More Smiley`e`e`ro
+Scarier`e`e`ho
+Bloodier`e`e`ho
+Creepier`e`e`ho
+Grimmer`e`e`ho
+More Eerie`e`e`ho
+Riskier`r`e`ad
+Edgier`r`e`ad
+Scarier`e`e`ad
+Deadlier`x`e`ad
+More Heart-pounding`e`e`ad
+More Ominous`e`e`ad
+More Intense`e`e`ad
+Prettier`m`e`ro
+More Historic`e`e`hi
+More Nostalgic`e`e`hi
+More Old-fashioned`e`e`hi
+More Periodic`e`e`hi
+More Authentic`e`e`hi
+More Vintage`e`e`hi
+More Antique`e`e`hi
+More Classical`e`e`hi
+More Colonial`e`e`hi
+More Retro`e`e`hi
+Daintier`e`e`ro
+Wilder`e`e`ad
+Braver`e`e`ad
+Riskier`e`e`ad
+More Explorative`e`e`ad
+More Daring`e`e`ad
+More Rugged`e`e`ad
+More Adventurous`e`e`ad
+More Tame`e`e`ad
+More Lively`e`e`ad
+More Off-road`e`e`ad
+More Cryptic`e`e`my`sc
