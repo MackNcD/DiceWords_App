@@ -1,1 +1,3 @@
 Input your sentence here, it will be an ``adjective`` input, surely.
+``article`` ``verbing`` ``noun-subj`` ``verbed`` a ``adjective`` ``noun-subj-s``
+``verb-s`` ``noun-thing`` ``noun-place-s`` ``adjective-ey``
