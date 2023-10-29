@@ -88,3 +88,30 @@ Input your sentence here, it will be an ``adjective`` input, surely.
     |
      Programs unicorn horn synthopolises cheery-looking.
     }
+----------- Format Code: 101010110011000 -----------
+
+``adverb`` ``verbing`` ``color`` ``animal``
+
+    {
+     Tenderly traveling with bronze skunk.
+    |
+     Endearingly evading blue raccoon.
+    |
+     Heart-pounding chasing indigo donkey.
+    |
+     Ferociously startling maroon praying mantis.
+    |
+     Exquisitely discovering indigo rooster.
+    |
+     Invariably sabotaging blue ostrich.
+    |
+     Confidently chasing green spider.
+    |
+     Animatedly dancing clear dragonfly.
+    |
+     Lightly conquering white buffalo.
+    |
+     Adventurously wiggling blue dragonfly.
+    |
+     Unrelentingly entering magenta zebra.
+    }
