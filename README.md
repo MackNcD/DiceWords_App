@@ -2,4 +2,4 @@ DiceWords is a new way to more precisely work with dynamic prompting, and will b
 If you'd like to add your own stuff into the master collection, you can reach us on Discord:
 https://discord.gg/HE5CVrYm
 
-Ask for @Note or @MackNcD
+Ask for @Note or @MackNcD or @Jeffisnothere
