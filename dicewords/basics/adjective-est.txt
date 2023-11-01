@@ -1,15 +1,16 @@
-Boldest
-Shiniest
-Fastest
-Quietest
-Strangest
+Longest
+Shortest
+Boldest`fa`ad
+Shiniest`mo
+Fastest`te`mo
+Quietest`my
+Strangest`sr
+Smartest`te`mo
+Fiercest`ad`fa
+Oddest`sr`co
+Quickest`te`mo
 Brightest`e`e`ro
 Darkest`e`e`ho
-Longest
-Smartest
-Fiercest
-Oddest
-Quickest
 Wildest`e`e`fa
 Dreamiest`e`e`fa
 Most Enchanted`e`e`fa
@@ -92,3 +93,29 @@ Most Rustic`e`e`hi
 Most Antiquey`e`e`hi
 Most Time-honored`e`e`hi
 Most Historic`e`e`hi
+
+Tallest`e`sc
+Bravest`ad`fa
+Brightest`ro`sc
+Darkest`ho
+Funniest`co
+Prettiest`ro
+Strongest`ad`fa
+Smartest`te`mo
+Fiercest`ad`sc
+Fastest`ad
+Scariest`ho
+Quietest`fa
+Happiest`ro
+Oldest`hi
+Wisest`fa`hi
+Softest`ro
+Loudest`co
+Wildest`fa`ad
+Sweetest`ro
+Ugliest`ho
+Nicest`ro
+Nastiest`ho
+Coolest`sc`fa
+Kindest`ro
+Strangest`sc`sr
