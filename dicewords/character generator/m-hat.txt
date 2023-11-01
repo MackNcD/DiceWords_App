@@ -1,0 +1,40 @@
+Fedora Hat`mo`fa
+Baseball Cap`mo`ad
+Beanie`mo
+Top Hat`mo`hi
+Cowboy Hat`mo`ad
+Trucker Hat`mo`ad
+Bowler Hat`mo`hi
+Beret`mo`hi
+Flat Cap`mo
+Fez Hat`mo`hi
+Bandana`mo`ad
+Panama Hat`mo
+Sombrero`mo`fa
+Kufi Cap`mo`hi
+Boater Hat`mo`fa
+Turban`mo`fa
+Newsboy Cap`mo`fa
+Bucket Hat`mo`fa
+Pork Pie Hat`mo`fa
+Kangol Hat`mo`fa
+Visor Cap`mo`ad
+Gatsby Cap`mo`hi
+Military Cap`mo`ad
+Taqiyah Cap`mo`hi
+Homburg Hat`mo`hi
+Greek Fisherman Cap`mo`hi
+Balaclava`mo`te
+Pith Helmet`mo`hi
+Viking Helmet`fa`hi
+Futuristic Helmet`sc`te
+Cyber Visor`sc`te
+Holographic Headgear`sc`te
+Neural Interface Helmet`sc`te
+Plasma Crown`sc`te
+Augmented Reality Goggles`sc`te
+Laser Scanner Cap`sc`te
+Exosuit Helmet`sc`ad
+Photon Headband`sc`fa
+Bio-Monitoring Headset`sc`te
+Antigravity Helmet`sc`te
