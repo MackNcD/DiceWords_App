@@ -93,7 +93,7 @@ def save_input():
         
         with open("assets\logs\logs.txt", 'a') as file:
             if input_text.strip():  # Check if input_text is not empty
-                file.write("    }\n")
+                file.write("    }\n\n")
                 file.write("----------- Format Code: " + str(format_code) + " -----------" + "\n\n")
                 file.write(input_text)
                 if not input_text.strip().endswith('\n'):
@@ -214,6 +214,8 @@ def process_text(template):
     template = re.sub(pattern_m, lambda match: re.sub(r'(?i)she', 'he', match.group()), template, flags=re.IGNORECASE)
     template = re.sub(pattern_m, lambda match: re.sub(r'(?i)hers', 'his', match.group()), template, flags=re.IGNORECASE)
     
+    template = re.sub(r'\s*$', '', template, flags=re.MULTILINE)
+    
     return template
 
 
@@ -232,7 +234,7 @@ def update_progress_bar(progress_var, value):
     app.update_idletasks()
     
 def increment_progress_bar(progress_var, placeholder_count_for_progress_bar, number_of_genres):
-    amount = (number_of_genres * 3.5)/placeholder_count_for_progress_bar
+    amount = (100/placeholder_count_for_progress_bar)
     progress_var.set(progress_var.get() + amount)  # Increment
     update_progress_bar(progress_var, progress_var.get()) #Progress bar
 
@@ -255,13 +257,12 @@ progress_var = 0
 def generate_sentence_variegated(template, word_lists, sfw_nsfw_setting, fiction_realism_setting, selected_genres, progress_var):
     number_of_attempts = 0
     successful_attempts = 0
-    print(f"Selected maturity Rating: {int(sfw_nsfw_setting)}")
-    print(f"Selected fictionality Level: {int(fiction_realism_setting)}")
+    print(f"Current Level of Maturity: {int(sfw_nsfw_setting)}")
+    print(f"Current Level of Fiction: {int(fiction_realism_setting)}")
     
-    number_of_genres = len(selected_genres)
+    number_of_genres = len(selected_genres) #this part is for the progress bar
     input_sentence = template #this part is for the progress bar
     placeholder_count_for_progress_bar = count_placeholder_words_for_progress_bar(input_sentence) # for the progress bar
-    print(f"Incremental value given to progress bar based on your choices: {(number_of_genres * 3.5)/placeholder_count_for_progress_bar}")
     
     while True:
         placeholders_replaced = False  # Track whether any placeholders were replaced in this iteration
@@ -269,12 +270,11 @@ def generate_sentence_variegated(template, word_lists, sfw_nsfw_setting, fiction
             if placeholder in template:
                 random.shuffle(word_list)
                 word_iterator = cycle(word_list)
-
+                                 
                 # Initialize random_word to None initially
                 random_word = None
 
                 for _ in range(len(word_list)):
-                    increment_progress_bar(progress_var, placeholder_count_for_progress_bar, number_of_genres)
                     number_of_attempts += 1
                     # Get the next word from the cycle
                     random_word = next(word_iterator)
@@ -288,166 +288,156 @@ def generate_sentence_variegated(template, word_lists, sfw_nsfw_setting, fiction
                     fiction_realism_rating = 'e'
                     selected_genre = 'e'
                     selected_genre_secondary = 'e'
-
+                    
+                    check_if_genre_list = ['sc', 'fa', 'hi', 'ad', 'my', 'ho', 'ro', 'co', 'sr', 'mo', 'te', 'nt']
+                    check_if_maturity_list = ['g', 'pg', 'm', 'r', 'x', 'xx', 'xxx']
+                    check_if_realism_list = ['f', 'sf', 'nf']
+                    
                     if matches:
-                        # Extract values from matches if they exist
-                        maturity_rating = matches[0]
-                        fiction_realism_rating = matches[1]
-                        selected_genre = matches[2]
+                        if matches and len(matches) > 0 and matches[0]:
+                            if matches[0] in check_if_genre_list:
+                                selected_genre = matches[0]
+                            elif matches[0] in check_if_maturity_list:
+                                maturity_rating = matches[0]
+                            elif matches[0] in check_if_realism_list:
+                                fiction_realism_rating = matches[0]
+                                
+                        if matches and len(matches) > 1 and matches[1]:
+                            if matches[1] in check_if_genre_list:
+                                if matches[0] in check_if_genre_list:
+                                    selected_genre_secondary = matches[1]
+                                else:
+                                    selected_genre = matches[1]
+                            elif matches[1] in check_if_maturity_list:
+                                maturity_rating = matches[1]
+                            elif matches[1] in check_if_realism_list:
+                                fiction_realism_rating = matches[1]
+                                
+                        if matches and len(matches) > 2 and matches[2]:
+                            if matches[2] in check_if_genre_list:
+                                if matches[1] in check_if_genre_list or matches[0] in check_if_genre_list:
+                                    selected_genre_secondary = matches[2]
+                                else:
+                                    selected_genre = matches[2]
+                            elif matches[2] in check_if_maturity_list:
+                                maturity_rating = matches[2]
+                            elif matches[2] in check_if_realism_list:
+                                fiction_realism_rating = matches[2]
+
+                        if matches and len(matches) > 3 and matches[3]:
+                            if matches[3] in check_if_genre_list:
+                                if matches[2] in check_if_genre_list or matches[1] in check_if_genre_list or matches[0] in check_if_genre_list:
+                                    selected_genre_secondary = matches[3]
+                                else:
+                                    selected_genre = matches[3]
+                            elif matches[3] in check_if_maturity_list:
+                                maturity_rating = matches[3]
+                            elif matches[3] in check_if_realism_list:
+                                fiction_realism_rating = matches[3]
+                                
+                        print(matches)
                         
-                        #check to see if there's a secondary genre
-                        if len(matches) > 3:
-                            selected_genre_secondary = matches[3]
-                        else:
-                            selected_genre_secondary = 'e'
-                        #if matches[0] in ['sc', 'fa', 'hi', 'ad', 'my', 'ho', 'ro', 'co', 'sr', 'mo', 'te', 'nt']:
-                        #    skip_rating_checks = True
+                        found_1 = any(item in matches for item in check_if_maturity_list)
+                        
+                        if not found_1:
+                            print("No maturity rating")
+                        else:    
+                            print("Maturity Rating:", maturity_rating.upper())
+                            if maturity_rating == 'e': #everything
+                                minM = 0
+                                maxM = 100
+                            elif maturity_rating == 'g':
+                                minM = 0
+                                maxM = 50
+                            elif maturity_rating == 'pg':
+                                minM = 10
+                                maxM = 70
+                            elif maturity_rating == 'm':
+                                minM = 45
+                                maxM = 100
+                            elif maturity_rating == 'r':
+                                minM = 60
+                                maxM = 100
+                            elif maturity_rating == 'x':
+                                minM = 70
+                                maxM = 100
+                            elif maturity_rating == 'xx':
+                                minM = 80
+                                maxM = 100
+                            elif maturity_rating == 'xxx':
+                                minM = 90
+                                maxM = 100
+                            if (sfw_nsfw_setting < minM or sfw_nsfw_setting > maxM):
+                                print('Maturity rating disqualification\n')
+                                continue
                             
-                    print("Maturity Rating:", maturity_rating.upper())
-                    if maturity_rating == 'e': #everything
-                        minM = 0
-                        maxM = 100
-                    elif maturity_rating == 'g':
-                        minM = 0
-                        maxM = 60
-                    elif maturity_rating == 'pg':
-                        minM = 0
-                        maxM = 70
-                    elif maturity_rating == 'm':
-                        minM = 45
-                        maxM = 95
-                    elif maturity_rating == 'r':
-                        minM = 60
-                        maxM = 100
-                    elif maturity_rating == 'x':
-                        minM = 70
-                        maxM = 100
-                    elif maturity_rating == 'xx':
-                        minM = 80
-                        maxM = 100
-                    elif maturity_rating == 'xxx':
-                        minM = 90
-                        maxM = 100
+                        found_2 = any(item in matches for item in check_if_realism_list)
+                                
+                        if not found_2:
+                            print ("No fiction/realism rating.")
+                        else:     
+                            print("Realism Rating:", fiction_realism_rating.upper())
+                            if fiction_realism_rating == 'e': #everything
+                                minR = 0
+                                maxR = 100
+                            elif fiction_realism_rating == 'nf':
+                                minR = 0
+                                maxR = 55 #maybe 55
+                            elif fiction_realism_rating == 'sf':
+                                minR = 30
+                                maxR = 95
+                            elif fiction_realism_rating == 'f':
+                                minR = 45 #maybe 45
+                                maxR = 100
+                                if (fiction_realism_setting < minR or fiction_realism_setting > maxR):
+                                    print('Fiction level disqualification\n')
+                                    continue  # Restart the inner loop to find another word
+                                
+                        found_3 = any(item in matches for item in check_if_genre_list)
+                                
+                        if not found_3:
+                            print ("Checking genres.")
+                        else:  
+                            if selected_genre != 'e':
+                                print(f"Genre: {get_full_genre_name(selected_genre)}")
+                            else:
+                                print("Genre: Any/All")
                         
-                    print("Realism Rating:", fiction_realism_rating.upper())
-                    if fiction_realism_rating == 'e': #everything
-                        minR = 0
-                        maxR = 100
-                    elif fiction_realism_rating == 'nf':
-                        minR = 0
-                        maxR = 55 #maybe 55
-                    elif fiction_realism_rating == 'sf':
-                        minR = 30
-                        maxR = 95
-                    elif fiction_realism_rating == 'f':
-                        minR = 45 #maybe 45
-                        maxR = 100
-                        
-                    if selected_genre != 'e':
-                        print(f"Genre: {get_full_genre_name(selected_genre)}")
-                        increment_progress_bar(progress_var, placeholder_count_for_progress_bar, number_of_genres)
-                    else:
-                        print("Genre: Any/All")
-                        
-                    if random_word == "":
-                        print ("Error in text file, blank line found.\n")
-                        continue
-                    elif (sfw_nsfw_setting < minM or sfw_nsfw_setting > maxM):
-                        print('Maturity rating disqualification\n')
-                        continue
-                    elif (fiction_realism_setting < minR or fiction_realism_setting > maxR):
-                        print('Fiction level disqualification\n')
-                        continue  # Restart the inner loop to find another word
+                    
                      # Check if the word's primary genre is not in your list
-                    elif selected_genre not in selected_genres and selected_genre != 'e':
-                        print(f"Primary genre [{selected_genre.upper()}] Does not match genre list: ")
-                        all_of_current_genre_selection_string = "', '".join(selected_genres)
-                        print(f"['{all_of_current_genre_selection_string.upper()}']")
-                        increment_progress_bar(progress_var, placeholder_count_for_progress_bar, number_of_genres)
-                        
+                    if selected_genre not in selected_genres and selected_genre != 'e':
+                        print(f"Primary genre [{selected_genre.upper()}] Does not match genre list")
                         # Check if the word has a secondary genre and it's not 'e'
                         if selected_genre_secondary != 'e':
                             print("Checking current potential word's 2nd genre...")
-                            increment_progress_bar(progress_var, placeholder_count_for_progress_bar, number_of_genres)
-                            
-                            # It has a 50% chance of passing if the secondary genre is in the list
                             if selected_genre_secondary in selected_genres:
-                                print(f"[{selected_genre_secondary.upper()}].\n")
-                                print(f"Fits critera:['{all_of_current_genre_selection_string.upper()}']")
-                                print("Coin flip...")
-                                increment_progress_bar(progress_var, placeholder_count_for_progress_bar, number_of_genres)
-                                if random.random() < 0.50:
-                                    print("Heads: The secondary genre gets current potential into the finished generation.\n")
-                                    break
-                                else:
-                                    print("Tails: The secondary genre does not qualify this potential word's chance pass. Rerolling...\n")
-                                    number_of_attempts +=1
-                                    continue                
-                            else:
-                                print(f"Potential word filtered out of final generation. Neither primary [{selected_genre.upper()}] nor secondary [{selected_genre_secondary.upper()}] --> ['{all_of_current_genre_selection_string.upper()}'] ...Acquiring new word.\n")
-                                number_of_attempts +=1
-                                continue
+                                print(f"[{selected_genre_secondary.upper()}] Fits criteria. \n")
+                                break
                         else:
                             # The word has no secondary genre, and the primary genre doesn't meet the criteria
-                            print("Secondary genre = 'E' or unlisted, and all-passing secondary genre is non-applicant, without a primary match.")
-                            # If the primary genre is in the list
-                            if selected_genre in selected_genres:#This part is redundant and can be deleted, from here
-                                print("Word passes.\n")
-                                break
-                            else:                #Down to here, but the below should still be printed/continued
-                                print("Rerolling...\n\n")
-                                continue
-                    elif selected_genre in selected_genres:
-                        print(f"Primary genre of this WordRoll meets your criteria, ")
-                        increment_progress_bar(progress_var, placeholder_count_for_progress_bar, number_of_genres)
-                        if selected_genre == 'e':
-                            print("because its primary genre is ['E'], which passes through all genre filtering mechanistry.")
-                        else: 
-                            all_of_current_genre_selection_string = "', '".join(selected_genres)
-                            print(f"[{selected_genre.upper()}] --> ['{all_of_current_genre_selection_string.upper()}']")
-                            print("Checking to see if the secondary genre matches as well...")
-                        # Check if the word has no secondary genre
-                        if selected_genre_secondary == 'e':
-                            print("Secondary genre is ['E']")
-                            increment_progress_bar(progress_var, placeholder_count_for_progress_bar, number_of_genres)
-                            # It passes automatically
-                            print("Passes through. Saving into generation logs.\n")
-                            
-                            break
-                        else:
-                            # The word has a secondary genre
-                            print(f'Secondary genre acquired. [{selected_genre_secondary.upper()}]')
-                            increment_progress_bar(progress_var, placeholder_count_for_progress_bar, number_of_genres)
-                            # It has a 25% chance of *not* passing if the secondary genre not is not selected
-                            if selected_genre_secondary not in selected_genres and random.random() < 0.25:
-                                print("Secondary genre does not fit criteria, 1:4 odds it will affect outcome of word roll...")
-                                print ("Less common (25%) outcome: Word removed from template.\n")
-                                continue
-                            else:
-                                print("Secondary genre does not fit criteria, 1:4 odds it will affect outcome of word roll...")
-                                print("More common (75%) outcome: Secondary genre is disregarded.")
-                                print("Word roll landed a successful output. Saving into generation logs.\n")
-                                
-                                break
-                    print("--------------------")
-                    break
+                            print("Secondary genre is unlisted, is non-applicant.\n")
+                            continue
+                    if selected_genre in selected_genres:#This part is redundant and can be deleted, from here
+                        print("Word passes.\n")
+                        break
+                        
                 random_word = random_word.split('`')[0]  # Breaks off the backtick
                 template = template.replace(placeholder, random_word, 1)
                 
                 placeholders_replaced = True
                 successful_attempts += 1
+                increment_progress_bar(progress_var, placeholder_count_for_progress_bar, number_of_genres)
                 print("Success!\n")
                 break
                             # Store the selected word for this placeholder
-
         if not placeholders_replaced:
             break  # No placeholders were replaced, so exit the loop
     print(f'Number of attempted matches = {number_of_attempts}')
     print(f'Successful parametrical pass-throughs = {successful_attempts}')
     progress_var.set(progress_var.get()-progress_var.get()) #Progress bar subtracted by total added
     update_progress_bar(progress_var, progress_var.get())
-    template = process_text(template)  # This directs all into process_text function
     
+    template = process_text(template) #This directs all into process_text function
     return template
 
 #---------------------Part Two ---------------------------- Mirrored Dicewords -------------------
@@ -457,12 +447,18 @@ def generate_sentence_mirrored(template, word_lists, sfw_nsfw_setting, fiction_r
     successful_attempts = 0
     print(f"Currently Selected Maturity Rating: {sfw_nsfw_setting}")
     print(f"Currently Selected Realism Rating: {fiction_realism_setting}")
+    
+    number_of_genres = len(selected_genres) #this part is for the progress bar
+    input_sentence = template #this part is for the progress bar
+    placeholder_count_for_progress_bar = count_placeholder_words_for_progress_bar(input_sentence) # for the progress bar
+    
+    
     for placeholder, word_list in word_lists.items():
         if placeholder in template:
             while True:
                 random_word = random.choice(word_list)
                 print(f'Attempting to place "{random_word.split("`")[0]}"')
-                progress_var.set(progress_var.get() + 1)  # Increment
+                progress_var.set(progress_var.get() + 0.2)  # Increment
                 update_progress_bar(progress_var, progress_var.get()) #Progress bar
                 
                 number_of_attempts += 1
@@ -475,146 +471,139 @@ def generate_sentence_mirrored(template, word_lists, sfw_nsfw_setting, fiction_r
                 fiction_realism_rating = 'e'
                 selected_genre = 'e'
                 selected_genre_secondary = 'e'
-
+                
+                check_if_genre_list = ['sc', 'fa', 'hi', 'ad', 'my', 'ho', 'ro', 'co', 'sr', 'mo', 'te', 'nt']
+                check_if_maturity_list = ['g', 'pg', 'm', 'r', 'x', 'xx', 'xxx']
+                check_if_realism_list = ['f', 'sf', 'nf']
+                
                 if matches:
-                    # Extract values from matches if they exist
-                    maturity_rating = matches[0]
-                    fiction_realism_rating = matches[1]
-                    selected_genre = matches[2]
-                    
-                    #check to see if there's a secondary genre
-                    if len(matches) > 3:
-                        selected_genre_secondary = matches[3]
-                    else:
-                        selected_genre_secondary = 'e'
-                    
-                print("Maturity Rating:", maturity_rating.upper())
-                    
-                if maturity_rating == 'e': #everything
-                    minM = 0
-                    maxM = 100
-                elif maturity_rating == 'g':
-                    minM = 0
-                    maxM = 60
-                elif maturity_rating == 'pg':
-                    minM = 0
-                    maxM = 70
-                elif maturity_rating == 'm':
-                    minM = 45
-                    maxM = 95
-                elif maturity_rating == 'r':
-                    minM = 60
-                    maxM = 100
-                elif maturity_rating == 'x':
-                    minM = 70
-                    maxM = 100
-                elif maturity_rating == 'xx':
-                    minM = 80
-                    maxM = 100
-                elif maturity_rating == 'xxx':
-                    minM = 90
-                    maxM = 100
-                    
-                print("Realism Rating:", fiction_realism_rating.upper())
-
-                if fiction_realism_rating == 'e': #everything
-                    minR = 0
-                    maxR = 100
-                elif fiction_realism_rating == 'nf':
-                    minR = 0
-                    maxR = 55 #maybe 55
-                elif fiction_realism_rating == 'sf':
-                    minR = 20
-                    maxR = 85
-                elif fiction_realism_rating == 'f':
-                    minR = 45 #maybe 45
-                    maxR = 100
-                    
-                if selected_genre != 'e':
-                        print(f"Genre: {get_full_genre_name(selected_genre)}")
-                else:
-                        print("Genre: Any/All")
-                        
-                if random_word == "":
-                    continue
-                elif (sfw_nsfw_setting < minM or sfw_nsfw_setting > maxM):
-                    print('Maturity level filter activated. Finding another word/phrase!\n')
-                    continue
-                elif (fiction_realism_setting < minR or fiction_realism_setting > maxR):
-                    print('Fiction level disqualifies randomly matched word/phrase.\n')
-                    continue  # Restart the inner loop to find another word
-                elif selected_genre not in selected_genres and selected_genre != 'e':
-                    # Check if the selected genre matches
-                    print('Genre disqualification process triggered. Finding another word/phrase!\n')
-                    continue  # Restart the inner loop to find another word
-                 # Check if the word's primary genre is not in your list
-                elif selected_genre not in selected_genres and selected_genre != 'e':
-                    print(f"Primary genre [{selected_genre.upper()}] of word does not meet your criteria: ")
-                    all_of_current_genre_selection_string = "', '".join(selected_genres)
-                    print(f"['{all_of_current_genre_selection_string.upper()}']")
-                    
-                    # Check if the word has a secondary genre and it's not 'e'
-                    if selected_genre_secondary != 'e':
-                        print("Checking potential word's second genre. Calculating...")
-
-                        # It has a 50% chance of passing if the secondary genre is in the list
-                        if selected_genre_secondary in selected_genres:
-                            print(f"[{selected_genre_secondary.upper()}].\n")
-                            print(f"It fits into your critera:['{all_of_current_genre_selection_string.upper()}']")
-                            print("Coin flip...")
-                            if random.random() < 0.50:
-                                print("The secondary genre gets the word roll through the gates.\n")
-                                successful_attempts += 1
-                                break
+                    if matches and len(matches) > 0 and matches[0]:
+                        if matches[0] in check_if_genre_list:
+                            selected_genre = matches[0]
+                        elif matches[0] in check_if_maturity_list:
+                            maturity_rating = matches[0]
+                        elif matches[0] in check_if_realism_list:
+                            fiction_realism_rating = matches[0]
+                            
+                    if matches and len(matches) > 1 and matches[1]:
+                        if matches[1] in check_if_genre_list:
+                            if matches[0] in check_if_genre_list:
+                                selected_genre_secondary = matches[1]
                             else:
-                                print("The secondary genre does not have an affect. Rerolling...\n")
-                                number_of_attempts +=1
-                                continue                
-                        else:
-                            print(f"Neither primary [{selected_genre.upper()}] nor secondary [{selected_genre_secondary.upper()}] genres match your selections, ['{all_of_current_genre_selection_string.upper()}'] acquiring new word.\n")
-                            number_of_attempts +=1
-                            continue
-                    else:
-                        # The word has no secondary genre, and the primary genre doesn't meet the criteria
-                        print("Secondary genre was either 'E' or unlisted, which does not warrant a chance for secondary genre application, without a primary match.")
-                        # If the primary genre is in the list
-                        if selected_genre in selected_genres:#This part is redundant and can be deleted, from here
-                            print("Word passes.\n")
-                            successful_attempts += 1
-                            break
-                        else:                #Down to here, but the below should still be printed/continued
-                            print("No worries, there's another word out here somewhere, I'll report back in a nanosecond.\n\n")
-                            continue
-                elif selected_genre in selected_genres:
-                    print(f"Primary genre of this word roll meets your criteria, ")
-                    if selected_genre == 'e':
-                        print("because its primary genre ['E'] passes through all genre filtering mechanistry. Checking for a secondary genre...")
-                    else: 
-                        all_of_current_genre_selection_string = "', '".join(selected_genres)
-                        print(f"[{selected_genre.upper()}] --> ['{all_of_current_genre_selection_string.upper()}']")
-                        print("Checking to see if the secondary genre matches as well...")
-                    # Check if the word has no secondary genre
-                    if selected_genre_secondary == 'e':
-                        print("Scan registers case for none found/pass all, secondary genre's wiring diffused...")
+                                selected_genre = matches[1]
+                        elif matches[1] in check_if_maturity_list:
+                            maturity_rating = matches[1]
+                        elif matches[1] in check_if_realism_list:
+                            fiction_realism_rating = matches[1]
+                            
+                    if matches and len(matches) > 2 and matches[2]:
+                        if matches[2] in check_if_genre_list:
+                            if matches[1] in check_if_genre_list or matches[0] in check_if_genre_list:
+                                selected_genre_secondary = matches[2]
+                            else:
+                                selected_genre = matches[2]
+                        elif matches[2] in check_if_maturity_list:
+                            maturity_rating = matches[2]
+                        elif matches[2] in check_if_realism_list:
+                            fiction_realism_rating = matches[2]
 
-                        # It passes automatically
-                        print("Word roll lands successfully into temporary output -- also saving into generation logs.\n")
-                        successful_attempts += 1
-                        break
-                    else:
-                        # The word has a secondary genre
-                        print(f'Secondary genre acquired. [{selected_genre_secondary.upper()}]')
-                        # It has a 25% chance of not passing if the secondary genre not is in the list
-                        if selected_genre_secondary not in selected_genres and random.random() < 0.25:
-                            print("Secondary genre does not fit criteria, 1:4 odds it will affect outcome of word roll..")
-                            print ("Less common outcome: Word removed from template.\n")
+                    if matches and len(matches) > 3 and matches[3]:
+                        if matches[3] in check_if_genre_list:
+                            if matches[2] in check_if_genre_list or matches[1] in check_if_genre_list or matches[0] in check_if_genre_list:
+                                selected_genre_secondary = matches[3]
+                            else:
+                                selected_genre = matches[3]
+                        elif matches[3] in check_if_maturity_list:
+                            maturity_rating = matches[3]
+                        elif matches[3] in check_if_realism_list:
+                            fiction_realism_rating = matches[3]
+                            
+                    print(matches)
+                    
+                    found_1 = any(item in matches for item in check_if_maturity_list)
+                    
+                    if not found_1:
+                        print("No maturity rating")
+                    else:    
+                        print("Maturity Rating:", maturity_rating.upper())
+                        if maturity_rating == 'e': #everything
+                            minM = 0
+                            maxM = 100
+                        elif maturity_rating == 'g':
+                            minM = 0
+                            maxM = 50
+                        elif maturity_rating == 'pg':
+                            minM = 10
+                            maxM = 70
+                        elif maturity_rating == 'm':
+                            minM = 45
+                            maxM = 100
+                        elif maturity_rating == 'r':
+                            minM = 60
+                            maxM = 100
+                        elif maturity_rating == 'x':
+                            minM = 70
+                            maxM = 100
+                        elif maturity_rating == 'xx':
+                            minM = 80
+                            maxM = 100
+                        elif maturity_rating == 'xxx':
+                            minM = 90
+                            maxM = 100
+                        if (sfw_nsfw_setting < minM or sfw_nsfw_setting > maxM):
+                            print('Maturity rating disqualification\n')
                             continue
+                        
+                    found_2 = any(item in matches for item in check_if_realism_list)
+                            
+                    if not found_2:
+                        print ("No fiction/realism rating.")
+                    else:     
+                        print("Realism Rating:", fiction_realism_rating.upper())
+                        if fiction_realism_rating == 'e': #everything
+                            minR = 0
+                            maxR = 100
+                        elif fiction_realism_rating == 'nf':
+                            minR = 0
+                            maxR = 55 #maybe 55
+                        elif fiction_realism_rating == 'sf':
+                            minR = 30
+                            maxR = 95
+                        elif fiction_realism_rating == 'f':
+                            minR = 45 #maybe 45
+                            maxR = 100
+                            if (fiction_realism_setting < minR or fiction_realism_setting > maxR):
+                                print('Fiction level disqualification\n')
+                                continue  # Restart the inner loop to find another word
+                            
+                    found_3 = any(item in matches for item in check_if_genre_list)
+                            
+                    if not found_3:
+                        print ("Checking genres.")
+                    else:  
+                        if selected_genre != 'e':
+                            print(f"Genre: {get_full_genre_name(selected_genre)}")
                         else:
-                            print("Secondary genre does not fit criteria, 1:4 odds it will affect outcome of word roll..")
-                            print("More common outcome: Secondary genre is disregarded.")
-                            print("Word roll lands successfully into temporary output -- also saving into generation logs.\n")
-                            successful_attempts += 1
-                            break
+                            print("Genre: Any/All")
+                        
+                    
+                     # Check if the word's primary genre is not in your list
+                    if selected_genre not in selected_genres and selected_genre != 'e':
+                        print(f"Primary genre [{selected_genre.upper()}] Does not match genre list")
+                        # Check if the word has a secondary genre and it's not 'e'
+                        if selected_genre_secondary != 'e':
+                            print("Checking current potential word's 2nd genre...")
+                            if selected_genre_secondary in selected_genres:
+                                print(f"[{selected_genre_secondary.upper()}] Fits criteria. \n")
+                                break
+
+                        else:
+                            # The word has no secondary genre, and the primary genre doesn't meet the criteria
+                            print("Secondary genre is unlisted, is non-applicant.\n")
+                            continue
+                    if selected_genre in selected_genres:#This part is redundant and can be deleted, from here
+                        print("Word passes.\n")
+                        
                 print("--------------------")
                 break
             
@@ -623,8 +612,12 @@ def generate_sentence_mirrored(template, word_lists, sfw_nsfw_setting, fiction_r
                 break
 
             # Remove bracket codes from the selected word
+            increment_progress_bar(progress_var, placeholder_count_for_progress_bar, number_of_genres)
+            print("Success!\n")
             random_word = random_word.split('`')[0]  # Breaks off the backtick
-            template = template.replace(placeholder, random_word, 10)
+            template = template.replace(placeholder, random_word, 100)
+            
+            
     print(f'Number of attempted matches = {number_of_attempts}')
     print(f'Successful parametrical pass-throughs = {successful_attempts}')
     progress_var.set(progress_var.get()-progress_var.get()) #Progress bar subtracted by total added
