@@ -1,0 +1,22 @@
+#Warning, this file is read as code, any line not initiated by a '#' is read as code.
+#You can delete this bit of code after you've identified the voices on your system
+for voice in voices:
+    print(f"ID: {voice.id}")
+    print(f"Name: {voice.name}")
+    print(f"Languages: {voice.languages}")
+    print(f"Gender: {voice.gender}")
+#This bit of code will give you a readout of available TTS voices and their IDs...
+
+
+# With any voices on your machine or potentially purchased/downloaded from a third party, you can assign them into DiceWords here.
+# Replace 'voice_id' with the ID of the desired voice
+voice_id = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0'
+
+#Common voices for Windows 11 (copy and paste after the voice_id = bit, ensure they are in 'quotes', without the #.)
+#HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_DAVID_11.0
+#HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+engine.setProperty('voice', voice_id)
+
+# This is the welcoming message. You can delete it -- it's completely optional.
+engine.say("Welcome to dee-ice weuerds, my love.")
+engine.runAndWait()
