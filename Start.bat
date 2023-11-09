@@ -5,7 +5,7 @@ setlocal enabledelayedexpansion
 color 0B
 
 :: Attempt to resize the command prompt window to 80 columns and 25 lines
-mode con: cols=80 lines=25
+mode con: cols=120 lines=25
 
 :: Retrieve the local and GitHub versions
 call :getPythonVersion
@@ -23,8 +23,8 @@ call :printCentered "Latest GitHub version: !github_version!"
 call :printLine
 call :printCentered "1. Run App"
 call :printCentered "2. Install App"
-call :printCentered "3. Join Discord"
-call :printCentered "4. Go to GitHub"
+call :printCentered "3. Retrieve Templates/DiceWords from Discord"
+call :printCentered "4. Check GitHub for Updates"
 call :printCentered "5. Exit"
 call :printLine
 echo.
@@ -91,13 +91,60 @@ call activate
 popd
 
 call :printCentered "Installing requirements..."
-pip install -r requirements.txt > assets\logs\install_log.txt 2>&1
+pip install -r requirements.txt > assets\other\install_log.txt 2>&1
 if %ERRORLEVEL% NEQ 0 (
-    call :printCentered "Failed to install requirements. Check 'assets\logs\install_log.txt' for details."
+    call :printCentered "Failed to install requirements. Check 'assets\other\install_log.txt' for details."
     pause
     goto menu
 )
-call :printCentered "Dependencies installed successfully. See 'assets\logs\install_log.txt' for details."
+call :printCentered "Dependencies installed successfully. See 'assets\other\install_log.txt' for details."
+
+call :printCentered "Please enter your username:"
+set /p username=
+
+:: Save the username into username.txt
+echo username="{%username%}" > assets/other/username.txt
+
+call :printCentered "Username registered. Username, templates and dicewords can be edited via text files from the relevant directories."
+timeout /t 7 /nobreak 1>nul
+call :printCentered "Give us just a few more seconds, the flux capacitors are warming."
+timeout /t 5 /nobreak 1>nul
+call :printCentered "WARNING: The available DiceWords and templates are not the sole intended use of this application. 
+timeout /t 5 /nobreak 1>nul
+call :printCentered "They are only intended to spark creativity and lend random ideas in specific forms the user *may* desire - 
+timeout /t 5 /nobreak 1>nul
+call :printCentered "as well as to provide an example of what is possible."
+timeout /t 3 /nobreak 1>nul
+call :printCentered "In the area of alterations and form fitting the mechanations to produce wildly unique and differing results,"
+timeout /t 2 /nobreak 1>nul
+call :printCentered "we here at Mythamnis intended for this application (and such had constructed it so) to be as visible, simple"
+timeout /t 1 /nobreak 1>nul
+call :printCentered " and as easy an experience as it could possibly be;"
+timeout /t 9 /nobreak 1>nul
+call :printCentered "so any application of the vast array of ideas the program could possibly serve are in easy reach." 
+timeout /t 8 /nobreak 1>nul
+call :printCentered "All variable data, input, output, and parametrical affects are editable in the enclosed .txt files."
+timeout /t 9 /nobreak 1>nul
+call :printCentered "CONSOLE: FLUX CAPACITORS PRIMED, VELOCITY ACHEIVED"
+timeout /t 3 /nobreak 1>nul
+call :printCentered "That's our cue!"
+timeout /t 2 /nobreak 1>nul
+call :printCentered "CONSOLE: FLUX CAPACITORS PRIMED, VELOCITY ACHEIVED"
+timeout /t 1 /nobreak 1>nul
+call :printCentered "CONSOLE: FLUX CAPACITORS PRIMED, VELOCITY ACHEIVED"
+timeout /t 1 /nobreak 1>nul
+call :printCentered "CONSOLE: FLUX CAPACITORS PRIMED, VELOCITY ACHEIVED"
+timeout /t 1 /nobreak 1>nul
+call :printCentered "Give us a second!"
+timeout /t 2 /nobreak 1>nul
+call :printCentered "The .txt files are few, and they're self-evident in name."
+timeout /t 2 /nobreak 1>nul
+call :printCentered "Visit us on discord, we can be pretty neat at times.
+timeout /t 5 /nobreak 1>nul
+call :printCentered "If you have, or decide to make a library, or even a few .txts, post it for the rest of us, please."
+timeout /t 2 /nobreak 1>nul
+call :printCentered "Happy rolling."
+
 echo.
 pause
 goto menu
@@ -113,11 +160,7 @@ start https://github.com/MackNcD/DiceWords_App
 goto menu
 
 :confirmExit
-call :printCentered "Are you sure you want to exit? (Y/N)"
-set /p confirm=
-if /i "!confirm!"=="Y" goto end
-call :printCentered "Returning to menu..."
-goto menu
+goto end
 
 :end
 call :printCentered "Exiting..."
@@ -131,10 +174,10 @@ goto :eof
 
 :: Function to retrieve App version
 :getAppVersion
-if exist assets\logs\Version.txt (
-    set /p app_version=<assets\logs\Version.txt
+if exist assets\other\version.txt (
+    set /p app_version=<assets\other\Version.txt
 ) else (
-    set app_version=Unknown
+    set app_version=1.4.4
 )
 goto :eof
 
