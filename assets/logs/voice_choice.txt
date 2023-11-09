@@ -10,13 +10,47 @@ for voice in voices:
 
 # With any voices on your machine or potentially purchased/downloaded from a third party, you can assign them into DiceWords here.
 # Replace 'voice_id' with the ID of the desired voice
-voice_id = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0'
+voice_id = 'voice_id_here'
 
 #Common voices for Windows 11 (copy and paste after the voice_id = bit, ensure they are in 'quotes', without the #.)
 #HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_DAVID_11.0
 #HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
 engine.setProperty('voice', voice_id)
 
+    
+with open("username.txt", "r") as name_file:
+    username_code = name_file.read()
+    exec(username_code, globals(), locals())
+
+# List of welcome messages
+welcome_messages_once = [
+    "Hello {username}!",
+    "I missed you, {username}!",
+    "Creative mode activated!",
+    "Slap my buttons {username}!",
+    "Just because I am open source does not mean I have no self respect.",
+    "How about a cup of coffee {username}.",
+    "Roll 'dem WordDice.",
+    "{username} oh {username} I taught I  was neva gonna sees you a-gyin!",
+    "{username} is that you?",
+    "Where have you been?",
+    "What's slapanin?",
+    "Evening!",
+]
+
+
+
+# Randomly select a welcome message
+welcome_message = random.choice(welcome_messages_once)
+
+# Replace the {username} placeholder with the user's username
+welcome_message = welcome_message.format(username=username)
+
+# Display the welcome message
+print(welcome_message)
+
+
 # This is the welcoming message. You can delete it -- it's completely optional.
-engine.say("Welcome to dee-ice weuerds, my love.")
+
+target=engine.say(welcome_message)
 engine.runAndWait()
