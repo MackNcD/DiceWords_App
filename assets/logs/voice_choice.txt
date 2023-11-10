@@ -18,7 +18,7 @@ voice_id = 'voice_id_here'
 engine.setProperty('voice', voice_id)
 
     
-with open("username.txt", "r") as name_file:
+with open("assets/other/username.txt", "r") as name_file:
     username_code = name_file.read()
     exec(username_code, globals(), locals())
 
@@ -31,10 +31,10 @@ welcome_messages_once = [
     "Just because I am open source does not mean I have no self respect.",
     "How about a cup of coffee {username}.",
     "Roll 'dem WordDice.",
-    "{username} oh {username} I taught I  was neva gonna sees you a-gyin!",
+    "{username} oh {username} I thought I  was never gonna see you again!",
     "{username} is that you?",
     "Where have you been?",
-    "What's slapanin?",
+    "What's up?",
     "Evening!",
 ]
 
@@ -50,7 +50,18 @@ welcome_message = welcome_message.format(username=username)
 print(welcome_message)
 
 
-# This is the welcoming message. You can delete it -- it's completely optional.
 
-target=engine.say(welcome_message)
-engine.runAndWait()
+
+
+
+# Generate a random number between 0 and 1
+random_number_wm = random.random()
+print(random_number_wm)
+
+# Set the probability threshold for showing the welcome message (e.g., 15%)
+probability_threshold = 0.15
+
+# Check if the random number is below the threshold
+if random_number_wm < probability_threshold:
+    target = engine.say(welcome_message)
+    engine.runAndWait()
