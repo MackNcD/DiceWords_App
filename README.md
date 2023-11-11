@@ -4,4 +4,4 @@ https://discord.gg/v73CFMVnV4
 
 Ask for @Note, @MackNcD, or @Gille
 
-EDIT: There's doubles of the shapes files, and template_maker.txt is the same as template_randomization.txt -> Choose one or the other.
+EDIT: There's doubles of the shapes files
