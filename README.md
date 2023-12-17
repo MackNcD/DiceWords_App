@@ -6,7 +6,9 @@ Python is being a ***** about highlighting these new forms of dynamic input, if 
 Intro:
 
 DiceWords is a new way to more precisely work with dynamic prompting, and will be continuously updated and continuously unified with clean, well-created and curated user-contributed material.
-If you'd like to add your own stuff into the master collection, you can reach us on Discord:
+If you'd like to help keep software like this free, please consider contributing a few cents. https://www.buymeacoffee.com/dicewords
+
+Another great way to keep the gates of open source open, is to give back in your own small creative way, and help build the master collection. We also want to hear your ideas of how to make the program phenomenal. You can reach us on Discord, we don't bite (except for Austin, who goes by "Note" on Discord, PM him and tell him to stop biting):
 https://discord.gg/v73CFMVnV4
 
 Install instructions:
