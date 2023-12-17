@@ -53,4 +53,4 @@ This will install the dependancies. Then you can open main.py and run it in wind
 
 Ask for @Note, @MackNcD, or @Gille
 
-EDIT: There's doubles of the shapes files
+EDIT: There's doubles of the shapes files Austin
