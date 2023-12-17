@@ -1,0 +1,4 @@
+Hyponym output example: >color
+Hypernym output example: ^color
+Synonym output example: ~beautiful
+Diceword output example: ``animal``

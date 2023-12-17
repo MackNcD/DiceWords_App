@@ -1,0 +1,67 @@
+#Warning, this file is read as code, any line not initiated by a '#' is read as code.
+#You can delete this bit of code after you've identified the voices on your system
+for voice in voices:
+    print(f"ID: {voice.id}")
+    print(f"Name: {voice.name}")
+    print(f"Languages: {voice.languages}")
+    print(f"Gender: {voice.gender}")
+#This bit of code will give you a readout of available TTS voices and their IDs...
+
+
+# With any voices on your machine or potentially purchased/downloaded from a third party, you can assign them into DiceWords here.
+# Replace 'voice_id' with the ID of the desired voice
+voice_id = 'voice_id_here'
+
+#Common voices for Windows 11 (copy and paste after the voice_id = bit, ensure they are in 'quotes', without the #.)
+#HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_DAVID_11.0
+#HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+engine.setProperty('voice', voice_id)
+
+    
+with open("prompts_and_text/username.txt", "r") as name_file:
+    username_code = name_file.read()
+    exec(username_code, globals(), locals())
+
+# List of welcome messages
+welcome_messages_once = [
+    "Hello {username}!",
+    "I missed you, {username}!",
+    "Creative mode activated!",
+    "Slap my buttons {username}!",
+    "Just because I am open source does not mean I have no self respect.",
+    "How about a cup of coffee {username}.",
+    "Roll 'dem WordDice.",
+    "{username} oh {username} I thought I  was never gonna see you again!",
+    "{username} is that you?",
+    "Where have you been?",
+    "What's up?",
+    "Evening!",
+]
+
+
+
+# Randomly select a welcome message
+welcome_message = random.choice(welcome_messages_once)
+
+# Replace the {username} placeholder with the user's username
+welcome_message = welcome_message.format(username=username)
+
+# Display the welcome message
+print(welcome_message)
+
+
+
+
+
+
+# Generate a random number between 0 and 1
+random_number_wm = random.random()
+print(random_number_wm)
+
+# Set the probability threshold for showing the welcome message (e.g., 7%)
+probability_threshold = 0.05
+
+# Check if the random number is below the threshold
+if random_number_wm < probability_threshold:
+    target = engine.say(welcome_message)
+    engine.runAndWait()

@@ -1,0 +1,13 @@
+genre_settings=100000000000
+sep_type_comma=False
+sep_type_linebreaks=False
+sep_type_curly=True
+current_line=1
+force_genres=off
+segmented_button=Variegated
+fiction_realism_setting=50
+sfw_nsfw_setting=50
+gen_template_setting=10
+rand_genre_setting=5
+individual_gen_ID=2877
+gen_tag=TAG
