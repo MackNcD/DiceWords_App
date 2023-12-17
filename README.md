@@ -9,7 +9,7 @@ Intro:
 DiceWords is a new way to more precisely work with dynamic prompting, and will be occasionally updated and unified with clean, well-created and curated user-contributed material.
 If you'd like to help keep software like this free, please consider contributing a few cents. https://www.buymeacoffee.com/dicewords
 
-Another great way to keep the gates of open source open, is to give back, you can find/share DiceWords on our discord. 
+Another great way to keep the gates of open source open, is to give back, you can share your (preferably parameter-applied) DiceWords on our discord. 
 The discord is also a place for new developers who are looking to get into new projects, usually those surrounding the state-of-the-art tech -- LLMs, Image Generation, etc. We're not currently training any  models--but new & improved implementations of existing AI--currently in an infantile stage, in execution, is the team's stated mission.
 
 
