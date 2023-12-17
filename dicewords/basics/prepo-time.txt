@@ -1,0 +1,7 @@
+Before
+After
+Since
+When
+As
+While
+And

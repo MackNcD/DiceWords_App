@@ -1,0 +1,97 @@
+Person`g`nf`e
+Fellow`g`e`e
+Lass`g`e`e
+Android`e`sf`sc
+Cyborg`e`sf`sc
+Alien`e`sf`sc
+Astronaut`e`e`sc
+Robot`e`nf`sc
+Droid`e`f`sc
+Mutant`pg`f`sc
+Exoplanet Explorer`e`f`sc
+Time Traveler`e`f`sc
+Genetic Engineer`e`sf`sc
+Space Pirate`e`f`sc
+Elf`e`f`fa
+Dragon`pg`f`fa
+Wizard`e`sf`fa
+Fairy`e`sf`fa
+Centaur`e`f`fa
+Unicorn`e`f`fa
+Troll`e`f`fa
+Demon Huntress`pg`f`fa
+Dwarf`e`f`fa
+Sorcerer`e`f`fa
+Knight`e`nf`fa
+Queen`e`nf`fa
+King`e`nf`fa
+Prince`e`nf`fa
+Princess`e`nf`fa
+Foot Soldier`pg`e`fa
+Archer`pg`sf`fa
+Paladin`pg`sf`fa
+Witch Doctor`pg`e`fa
+Blood Witch`r`f`fa
+Detective`e`e`my
+Suspect`e`e`my
+Sleuth`e`e`my
+Victim`r`e`my
+Inspector`e`e`my
+Witness`e`e`my
+Blackmailer`r`e`my
+Phantom`pg`e`my
+Coroner`r`e`my
+Alibi Writer`m`e`my
+Lover`m`e`ro
+Heartthrob`pg`e`ro
+Suitor`pg`e`ro
+Sweetheart`e`e`ro
+Soulmate`e`e`ro
+Casanova`m`e`ro
+Romeo`pg`e`ro
+Romantic`pg`e`ro
+Bridegroom`pg`e`ro
+Husband`pg`e`ro
+Wife`pg`e`ro
+Prostitute`xxx`e`ro
+Vampire`e`sf`ho
+Werewolf`e`f`ho
+Zombie`e`f`ho
+Ghost`e`sf`ho
+Demon`e`sf`ho
+Witch`e`sf`ho
+Poltergeist`e`sf`ho
+Possessed Person`e`sf`ho
+Haunter`e`sf`ho
+Slasher`r`e`ho
+Dead Body`r`e`ho
+Spy`e`e`my
+Assassin`r`e`my
+Agent`pg`e`my
+Double Agent`e`e`my
+Informant`e`e`my
+Mercenary`m`e`my
+Operative`e`e`my
+Mastermind`e`e`my
+Traitor`e`e`my
+Saboteur`pg`e`my
+Aristocrat`e`e`hi
+Gladiator`e`nf`hi
+Explorer`pg`e`hi
+Pioneer`pg`e`hi
+Suffragette`e`nf`hi
+Conquistador`e`nf`hi
+Aristocrat`e`e`hi
+Artisan`e`nf`hi
+Nomad`e`nf`hi
+Cavalryman`e`nf`hi
+Adventurer`e`e`ad
+Explorer`e`e`ad
+Mountaineer`e`nf`ad
+Treasure Hunter`e`e`ad
+Swashbuckler`e`sf`ad
+Trailblazer`e`e`ad
+Voyager`e`e`ad
+Nomad`e`e`ad
+Expedition Leader`e`nf`ad
+Archaeologist`e`nf`ad

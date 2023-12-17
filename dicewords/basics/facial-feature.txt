@@ -1,0 +1,14 @@
+Eyes
+Lips
+Mouth
+Teeth
+Ears
+Forehead
+Neck
+Eyebrows
+Nostrils
+Pupils
+Nose
+Cheeks
+Hair
+Scalp

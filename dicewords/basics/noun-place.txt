@@ -1,0 +1,135 @@
+Hyperspace`e`sf`sc
+Infinite Labrynthine Cornmaze`e`e`sr
+Land Of Shifting Paradigm`e`e`sr
+Growing, Rolling Hills Landscape`e`e`sr
+A Pirate's Ship`e`e`hi
+Spacecraft Landing Bay`e`e`sc
+Moon Surface`e`e`sc
+Space Station`e`e`sc
+Cyberspace`e`e`sc
+Cryo Chamber`e`sf`sc
+Bio Lab`e`e`sc
+Zero-G Lounge`e`sf`sc
+Android Factory`e`sf`sc
+Alien Outpost`e`sf`sc
+Warp Drive Space Runway`e`sf`sc
+Planet in the middle of being Terraformed`e`sf`sc
+Twin Starship Bridge`e`sf`sc
+Radioactive Reactor Site`e`e`sc
+Inside the ruins of an ancient crashed Space Craft`e`f`sc`hi
+Enchanted Forest`e`f`fa
+Hidden Cavern`e`e`fa
+Wizard's Tower`e`f`fa
+Elven Kingdom`e`f`fa
+Dragon's Lair`e`f`fa
+Fairy Glade`e`f`fa
+Dwarven Mine`e`f`fa
+Sorcerer's Keep`e`f`fa
+Unicorn Meadow`e`f`fa
+Troll Bridge`e`f`fa
+Goblin's Market`e`f`fa
+Witch's Cottage`e`sf`fa
+Tavern`e`e`fa
+Blacksmith's Shop`e`e`fa
+Abandoned Mansion`e`e`my
+Secluded Island`e`e`my
+Old Library`e`e`my
+Cryptic Labyrinth`e`e`my
+Detective Agency`e`nf`my
+Secret Tunnel`e`e`my
+Foggy Harbor`e`e`my
+Crime Scene`e`nf`my
+Haunted Manor`e`sf`my
+Whispering Woods`e`sf`my
+Mysterious Alley`e`nf`my
+Hidden Room`e`nf`my
+Candlelit Bistro`e`e`ro
+Moonlit Beach`e`e`ro
+Rose Garden`e`e`ro
+Lovers' Bridge`e`e`ro
+Romantic Vineyard`e`e`ro
+Cozy Fireplace`e`e`ro
+Proposal Overlook`e`e`ro
+Honeymoon Cabin`e`e`ro
+Heart-Shaped Pond`e`e`ro
+Sunset Pier`e`e`ro
+Starry Night Ballroom`m`e`ro
+Serenade-Filled Balconies Of New York`e`e`ro
+Abandoned Asylum`e`e`ho
+Haunted Mansion`e`sf`ho
+Creepy Carnival`e`e`ho
+Eerie Graveyard`e`e`ho
+Cursed Woods`e`sf`ho
+Isolated Cabin`e`e`ho
+Ghostly Inn`e`e`ho
+Abandoned Mine`e`e`ho
+Spooky Swamp`e`e`ho
+Wrecked Old Factory`e`e`ho
+Sinister Orphanage`r`e`ho
+Forgotten Chapel`e`e`ho
+Cave System`e`e`ad
+Dark Forest`pg`e`ad
+Deep in the Sea`pg`e`ad
+Mountain Climbing
+Mysterious Island`e`e`ad
+Outdoor Activities
+Wilderness Expedition
+Undercover Safehouse`e`e`ad
+High-Stakes Casino`e`e`ad
+Secret Meeting Point`e`e`ad
+Dark Alleyway`e`e`ad
+Covert Laboratory`e`sf`ad
+Underground Bunker`e`e`ad
+Safe-cracking Workshop`e`e`ad
+Chase Rooftops`e`e`ad
+Interrogation Room`e`nf`my
+Sniper's Perch`e`nf`my
+Surveillance Van`e`nf`my
+Cryptic Warehouse`e`nf`my
+Medieval Castle`e`e`hi
+Ancient Marketplace`e`e`hi
+Renaissance Court`e`e`hi
+Viking Village`e`e`hi
+Roman Colosseum`e`e`hi
+Victorian Manor`e`e`hi
+Aztec Pyramid`e`e`hi
+Silk Road Caravan`m`e`hi
+Egyptian Temple`e`e`hi
+Colonial Tavern`e`e`hi
+Pirate Cove`e`e`hi
+Revolutionary War Battlefield`e`e`hi
+Jungle Ruins`e`e`ad
+Lost Temple`e`e`ad
+Treasure Island`e`e`ad
+Desert Oasis`e`e`ad
+Deep Cave`e`e`ad
+Mountain Peak`e`e`ad
+Coral Reef`e`e`ad
+Uncharted Waters`e`e`ad
+Ancient Trail`e`e`ad
+Volcano Base`e`e`ad
+Wilderness Camp`e`e`ad
+Beach where there is a Shipwreck`e`e`ad
+The Zoo`g`nf`e
+Beacon Of Light`g`nf`sc
+Gypsie Stand`g`nf`hi
+Outdoor Marketplace`g`nf`hi`mo
+Nudist Colony`xx`e`mo`ro
+An Underground Pool`g`nf`mo
+The Boardwalk`g`nf`mo
+The Interior Of A Cozy Cafe`g`nf`mo
+An Underwater City Beneath A Transparent Dome`g`f`sc
+Grand Stadium`g`nf`mo
+Gymnasium`g`nf`mo
+Boxing Ring`pg`nf`mo
+Burning Building`g`nf`mo`ad
+Classroom`g`nf`mo
+The Interior Of A Stone Castle`g`nf`hi
+The Courtyard Of An Old Castle`g`nf`hi
+The Interior of a Spacecraft`g`f`sc
+Music Festival`g`nf`mo
+Spot on The Bus`g`nf`mo
+Deck Of A Boat`g`nf`hi`mo
+In An Aeroplane at High Altitude`g`nf`mo`hi
+In The Back Seats Within a Vehicle`g`nf`mo`ro
+Safari`g`nf`mo`hi

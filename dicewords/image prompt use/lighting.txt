@@ -1,0 +1,25 @@
+Backlighting
+Bioluminescent Details
+Bloom Lighting
+Caustics
+Cinematic Lighting
+Diffused Lighting
+Cinematic Lighting
+Diffused Lighting
+Ektachrome
+Global Illumination
+Glowing
+God Rays
+Hard Shadows
+Indirect Lighting
+Iridescent
+Luminescence
+Radiant Light Rays
+Rim Lighting
+Shimmering Light
+Soft Lighting
+Specular Lighting
+Studio Lighting
+Subsurface Scattering
+Translucency
+Volumetric Lighting

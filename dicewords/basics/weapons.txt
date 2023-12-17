@@ -1,0 +1,44 @@
+Sword`g`sf`sc
+Dagger`m`sf`ho
+Hammer`r`nf`ad
+Blaster`e`f`sc
+Staff`g`sf`fa
+Wand`e`f`fa
+Spear`pg`f`fa
+Raygun`e`f`sc
+Reaver`m`sf`ho
+Staff`pg`sf`fa
+Gun`e`nf`ad
+Cannon`g`nf`sc
+Blade`e`sf`sc
+Bow`pg`nf`fa
+Katana`e`sf`sc
+Cane`m`sf`fa
+Crossbow`e`sf`fa
+Electronics Disruptor`r`sf`sc
+Saber`pg`nf`fa
+Rocket Launcher`e`nf`sc
+Scythe`r`sf`ho
+Lance`e`nf`fa
+Mace`e`nf`ad
+Blade`r`nf`ho
+Rod`e`nf`sc
+Arbalest`pg`f`fa
+Emitter`e`f`sc
+Knife`e`nf`ad
+Pistol`g`nf`ad
+Rifle`g`nf`ad
+Axe`m`nf`ad
+Katana`e`nf`ad
+Shotgun`r`nf`ad
+Spear`e`nf`ad
+Grenade`e`nf`ad
+Bow and Arrow`e`nf`ad
+Dagger`e`nf`ad
+Crossbow`e`nf`ad
+Club`e`nf`ad
+Nunchaku`e`nf`ad
+Rapier`e`sf`ad
+Sling`m`nf`ad
+Flamethrower`e`nf`ad
+Bazooka`e`nf`ad
