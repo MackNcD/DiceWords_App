@@ -1,7 +1,7 @@
 Recent Update (1.4):
 Synonyms can be accessed by adding a '~' before a word. Works great, but fair warning, if the word doesn't end with a space (i.e. -> .,!?) -- it's touch and go whether it's recognized as a real word.
 Hyponyms and hypernyms can be accessed through the same convention -- however, the activation symbols are obviously different -- '^' and '>' are their access triggers, respectively.
-Python is being a ***** about highlighting these new forms of dynamic input, if it bugs people that the words don't change color like they do for DiceWords themselves, I'll find a way.
+
 
 Intro:
 
