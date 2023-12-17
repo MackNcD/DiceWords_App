@@ -6,6 +6,7 @@ import ttkbootstrap as ttk
 import customtkinter
 from customtkinter import CTkEntry, CTkCanvas, CTkSlider, CTkTextbox, CTkButton, CTkSegmentedButton, CTkSwitch, CTkLabel
 import tkinter as tk
+from tkinter import filedialog
 from tkinter import Text, Entry, Label, messagebox, Button
 from tkinter import OptionMenu, PhotoImage, Scale
 from tkinter import Checkbutton, IntVar
@@ -18,6 +19,11 @@ import threading
 #import win32com.client
 import locale
 import pyttsx3
+import string
+import json
+from wordhoard import Synonyms
+from wordhoard import Hypernyms
+from wordhoard import Hyponyms
 
 locale.setlocale(locale.LC_NUMERIC, 'C') #To fix the customtkinter bugs
 
@@ -40,7 +46,6 @@ highlight_text = "#233958"
 border_color = "#1F232A"
 
 btn_font = ('Segoe UI', 12)
-btn_font_gen = ('Segoe UI Black', 12)
 
 button_bg_A = '#586074'
 button_bg_B = '#586074'
@@ -74,50 +79,126 @@ def remove_last_curly_bracket(file_path):
             file.truncate()
             file.writelines(lines)
             
+long_cuplets = False
 induct_new_cuplet = False #Induction of new cuplet, turns quickly on then off
 # Function to save input text if it changes
+current_line = 1
+
+# Variables
+avail_chars = string.ascii_uppercase + string.digits
+gen_cuplet = ''.join(random.sample(avail_chars, 2))
+session_tag = ''.join(random.sample(avail_chars, 2))
+individual_gen_ID = 0
+gen_tag = ''
+id_string = ''
+display_gen_ID = format(individual_gen_ID, '09_b')
+representative_string = '---------------------------------------------------'
+
+# Functions
+def update_gen_ID_label():
+    global gen_tag, session_tag, gen_cuplet, display_gen_ID, individual_gen_ID
+    gen_ID_label.config(text=f"Output ID: {gen_cuplet}-{gen_tag.strip()}_{display_gen_ID}\n")
+
 def save_input():
-    global current_input
+    global current_input, long_cuplets, representative_string, current_line, induct_new_cuplet, gen_tag, session_tag, individual_gen_ID, gen_cuplet, display_gen_ID, id_string, number_of_gens
     input_text = entry.get("1.0", ttk.END)
     
-    global induct_new_cuplet
-    if input_text != current_input or induct_new_cuplet == True:
-        induct_new_cuplet = False
-        global number_of_gens
-        number_of_gens -= (number_of_gens - 1)
-        current_input = input_text
-        global format_code
-        random_number = random.randint(16384, 32767) #random
-        binary_string = bin(random_number)[2:]
-        format_code = int(binary_string)
+    individual_gen_ID += 1
+    if individual_gen_ID >= 4095: #1023
+        #gen_cuplet = ''.join(random.sample(avail_chars, 2))
+        individual_gen_ID = 0
+    display_gen_ID = format(individual_gen_ID,'09_b')
+    gen_tag = gen_tag_entry.get("1.0", ttk.END)
         
-        with open("assets\logs\logs.txt", 'a') as file:
-            if input_text.strip():  # Check if input_text is not empty
-                file.write("    }\n\n")
-                file.write("----------- Format Code: " + str(format_code) + " -----------" + "\n\n")
-                file.write(input_text)
-                if not input_text.strip().endswith('\n'):
-                    file.write("\n")  # Ensure input_text ends with a newline
-                file.write("    {\n")
-            log_text = output_text.get("1.0", ttk.END)
-            if log_text.strip():  # Check if log_text is not empty
-                file.write("     " + log_text)
-                remove_last_curly_bracket(r"assets\logs\logs.txt")
-            update_log_text()
-    else:
-        remove_last_curly_bracket(r"assets\logs\logs.txt")
-        with open("assets\logs\logs.txt", 'a') as file:
-            log_text = output_text.get("1.0", ttk.END)
-            if log_text.strip():  # Check if log_text is not empty
-                file.write("    |\n     " + log_text)
+    if long_cuplets == False:
+        
+        if input_text != current_input or induct_new_cuplet == True:
+            gen_cuplet = ''.join(random.sample(avail_chars, 2))
+            induct_new_cuplet = False
+            number_of_gens -= (number_of_gens - 1)
+            current_input = input_text
+         #xy_code = individual_gen_ID and gen_cuplet
+            
+            with open("prompts_and_text\logs.txt", 'a') as file:
+                if input_text.strip():  # Check if input_text is not empty
+                    file.write("    }\n\n")
+                    
+                    #file.write(f"  {representative_string}\n Generation Group User Tag: {gen_tag.strip()}\n Session Tag: {session_tag}\n Unique Cuplet Tag: {gen_cuplet}\n\n")
+                    file.write(f"{representative_string}\n              Cuplet Code: {gen_tag.strip()}_{session_tag}-{gen_cuplet},\n             Gen: {gen_cuplet}-{gen_tag.strip()}_{display_gen_ID}\n{representative_string}")
+                    file.write(f"\n{input_text.strip()}")
+                    file.write(f"\n{representative_string}")
+                    if not input_text.strip().endswith('\n'):
+                        file.write("\n")  # Ensure input_text ends with a newline
+                    file.write("    {\n")
+                log_text_add = output_text.get("1.0", ttk.END)
+                if log_text_add.strip():  # Check if log_text_add is not empty
+                    file.write("     " + log_text_add)
+                    remove_last_curly_bracket(r"prompts_and_text\logs.txt")
+                update_log_text()
+        else:
+            remove_last_curly_bracket(r"prompts_and_text\logs.txt")
+            with open("prompts_and_text\logs.txt", 'a') as file:
+                log_text_add = output_text.get("1.0", ttk.END)
+                if log_text_add.strip():  # Check if log_text_add is not empty
+                    file.write("    |\n     " + log_text_add)
+                file.write("    }\n")
+                update_log_text()
+        update_log_text()
+        
+    elif long_cuplets == True:
+        remove_last_curly_bracket(r"prompts_and_text\logs.txt")
+        with open("prompts_and_text\logs.txt", 'a') as file:
+            log_text_add = output_text.get("1.0", ttk.END)
+            if log_text_add.strip():  # Check if log_text_add is not empty
+                file.write("    |\n     " + log_text_add)
             file.write("    }\n")
             update_log_text()
+    id_string = (f"Output ID: {gen_tag.strip()}-{session_tag}-{gen_cuplet}-{display_gen_ID}")
     update_log_text()
+    app.after(0, update_gen_ID_label)
+     #----------------------------------------------------------
+    gen_tag = gen_tag.strip()
+    session_file_path = f"prompts_and_text/tagged_prompt_outputs/{gen_tag}.txt"
+    if not os.path.exists(session_file_path):
+        with open(session_file_path, 'w'): #automatically creates the file
+            print(f"Created new generation output session at tagged session: */sessions/{gen_tag}.txt")
+    with open(session_file_path, 'a') as file:
+        if input_text.strip():  # Check if input_text is not empty
+            session_line = output_text.get("1.0", ttk.END)
+            file.write(f"{session_line.strip()}\n")
+    #------------------------------------------------------------
+    # Create or open the JSON file
+    # Specify the folder structure
+    folder_structure = ["prompts_and_text", "using_json"]
+
+    # Combine the folder structure and file name
+    json_file_path = os.path.join(*folder_structure, "generated_outputs.json")
+    if not os.path.exists(json_file_path):
+        with open(json_file_path, 'w') as json_file:
+            json.dump({}, json_file)
+
+    # Read the existing data
+    with open(json_file_path, 'r') as json_file:
+        data = json.load(json_file)
+
+    # Add the generated output to the corresponding key
+    if gen_tag not in data:
+        data[gen_tag] = []
+
+    if input_text.strip():
+        session_line = output_text.get("1.0", ttk.END)
+        data[gen_tag].append(session_line.strip())
+
+    # Write the updated data back to the JSON file
+    with open(json_file_path, 'w') as json_file:
+        json.dump(data, json_file, indent=2)
+        
+#----------------------------------------------------------
 
 def new_cuplet():
     global induct_new_cuplet
     induct_new_cuplet = True
-    generate_new_sentence()
+    generate_new_sentence_thread()
     
 def load_word_list(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
@@ -194,6 +275,9 @@ def process_text(template):
     # Replace "leaf" with "leaves" if it ends in 'f' or 'fe'
     template = re.sub(r'\b(f|fe)\b', r'ves', template)
     
+    # Replace <> marks with a linebreak
+    #template = template.replace("<>", "\n")
+    
     return template
 
 
@@ -205,6 +289,8 @@ fiction_realism_setting = 50
 selected_genres = ['e',]#,'sc','fa','hi','ad','my','ho','ro','co','sr','mo','te'
 
 #Part One------------------------------Loading Bar-------------------------------------
+
+
 def update_progress_bar(progress_var, value):
     # Ensure the progress value is within the 0-100 range
     value = max(0, min(100, value))
@@ -241,8 +327,11 @@ def generate_sentence_variegated(template, word_lists, sfw_nsfw_setting, fiction
     
     number_of_genres = len(selected_genres) #this part is for the progress bar
     input_sentence = template #this part is for the progress bar
-    placeholder_count_for_progress_bar = count_placeholder_words_for_progress_bar(input_sentence) # for the progress bar
     
+    placeholder_count_for_progress_bar = count_placeholder_words_for_progress_bar(input_sentence) # for the progress bar
+    if placeholder_count_for_progress_bar >= 1: #make sure there's placeholders or it will display error
+        small_iterator = 2 / (placeholder_count_for_progress_bar*2)
+        
     while True:
         placeholders_replaced = False  # Track whether any placeholders were replaced in this iteration
         for placeholder, word_list in word_lists.items():
@@ -261,7 +350,8 @@ def generate_sentence_variegated(template, word_lists, sfw_nsfw_setting, fiction
                     # Use regular expression to find all characters between backticks
                     matches = re.findall(r'`([^`]+)', random_word)
                     print(f'Attempting to place "{random_word.split("`")[0]}" for\n {placeholder}')
-                    progress_var.set(progress_var.get() + 0.2)  # Increment
+                    
+                    progress_var.set(progress_var.get() + small_iterator)  # orig. 0.1 increment
                     update_progress_bar(progress_var, progress_var.get()) #Progress bar
                     
                     # Initialize default values for ratings
@@ -374,18 +464,18 @@ def generate_sentence_variegated(template, word_lists, sfw_nsfw_setting, fiction
                             if fiction_realism_rating == 'e': #everything
                                 minR = 0
                                 maxR = 100
-                            elif fiction_realism_rating == 'nf':
-                                minR = 0
-                                maxR = 55 #maybe 55
-                            elif fiction_realism_rating == 'sf':
-                                minR = 30
-                                maxR = 95
                             elif fiction_realism_rating == 'f':
-                                minR = 45 #maybe 45
-                                maxR = 100
-                                if (fiction_realism_setting < minR or fiction_realism_setting > maxR):
-                                    print('Fiction level disqualification\n')
-                                    continue  # Restart the inner loop to find another word
+                                minR = 0 #maybe 45
+                                maxR = 55
+                            elif fiction_realism_rating == 'sf':
+                                minR = 10
+                                maxR = 75
+                            elif fiction_realism_rating == 'nf':
+                                minR = 45
+                                maxR = 100 #maybe 55
+                            if (fiction_realism_setting < minR or fiction_realism_setting > maxR):
+                                print('Fiction level disqualification\n')
+                                continue  # Restart the inner loop to find another word
                                 
                         found_3 = any(item in matches for item in check_if_genre_list)
                                 
@@ -424,6 +514,7 @@ def generate_sentence_variegated(template, word_lists, sfw_nsfw_setting, fiction
                             
                         
                 random_word = random_word.split('`')[0]  # Breaks off the backtick
+                #random_word = '~' + random_word # Make sure if this is turned on it comes with info about errors from words that don't have listed synonyms or aren't correctly configured somehow
                 template = template.replace(placeholder, random_word, 1)
                 
                 placeholders_replaced = True
@@ -434,24 +525,30 @@ def generate_sentence_variegated(template, word_lists, sfw_nsfw_setting, fiction
                             # Store the selected word for this placeholder
         if not placeholders_replaced:
             break  # No placeholders were replaced, so exit the loop
+        
+    template = template.lower()
+    template = replace_words_synonyms(template)
+    template = replace_words_hypernyms(template)
+    template = replace_words_hyponyms(template)
+    #template = replace_words_antonyms(template)
+        
     print(f'Number of attempted matches = {number_of_attempts}')
     print(f'Successful parametrical pass-throughs = {successful_attempts}')
     end_time = time.time()
     elapsed_time = end_time - start_time
-    if elapsed_time>5:
+    if elapsed_time>1:
         print(f"\nGeneration took {elapsed_time:.2f} seconds to execute.")
-    if elapsed_time>9:
+    if elapsed_time>7:
         print("\n Try turning off 'forced genres' if times seem excessive.\n")
     progress_var.set(progress_var.get()-progress_var.get()) #Progress bar subtracted by total added
     update_progress_bar(progress_var, progress_var.get())
     
-    template = process_text(template) #This directs all into process_text function
     return template
 
 #---------------------Part Two ---------------------------- Mirrored Dicewords -------------------
 
 def generate_sentence_mirrored(template, word_lists, sfw_nsfw_setting, fiction_realism_setting, selected_genres, progress_var):
-    
+    current_word_attempts = 0
     number_of_attempts = 0
     successful_attempts = 0
     print(f"Currently Selected Maturity Rating: {sfw_nsfw_setting}")
@@ -461,17 +558,24 @@ def generate_sentence_mirrored(template, word_lists, sfw_nsfw_setting, fiction_r
     input_sentence = template #this part is for the progress bar
     placeholder_count_for_progress_bar = count_placeholder_words_for_progress_bar(input_sentence) # for the progress bar
     
+    placeholder_count_for_progress_bar = count_placeholder_words_for_progress_bar(input_sentence) # for the progress bar
+    if placeholder_count_for_progress_bar >= 1: #make sure there's placeholders or it will display error
+        small_iterator = 2 / (placeholder_count_for_progress_bar*2)
     
     for placeholder, word_list in word_lists.items():
         if placeholder in template:
+            number_of_attempts += 1
             while True:
                 random_word = random.choice(word_list)
                 print(f'Attempting to place "{random_word.split("`")[0]}"')
-                progress_var.set(progress_var.get() + 0.2)  # Increment
+                progress_var.set(progress_var.get() + small_iterator)  # Increment (oringally 0.1)
                 update_progress_bar(progress_var, progress_var.get()) #Progress bar
+                current_word_attempts += 1
+                if current_word_attempts >= 70: #arbitrary, time to find a matching word, but not too high
+                    current_word_attempts = 0
+                    print("\n\nAttempt limit reached, current word chosen.\n\nDiceWord may not have genres assigned, assign some or do not force genres.\n")
+                    break
                 
-                number_of_attempts += 1
-
                 # Use regular expression to find all characters between backticks
                 matches = re.findall(r'`([^`]+)', random_word)
 
@@ -484,7 +588,22 @@ def generate_sentence_mirrored(template, word_lists, sfw_nsfw_setting, fiction_r
                 check_if_genre_list = ['sc', 'fa', 'hi', 'ad', 'my', 'ho', 'ro', 'co', 'sr', 'mo', 'te', 'nt']
                 check_if_maturity_list = ['g', 'pg', 'm', 'r', 'x', 'xx', 'xxx']
                 check_if_realism_list = ['f', 'sf', 'nf']
-                
+                            
+                if random_word == "":
+                        print ("Error in text file, blank line found.\n")
+                        continue
+                    
+                if not matches:
+                    print("Word is without parameters.")
+                    matches = ['E', 'E', 'E', 'E']
+                    if force_genres.get() == "off":
+                        print("Therefore, passes all parameter checks.")
+                        #Optional "Do 'force all parameters' option can be added"
+                        break
+                    else:
+                        print("Force genres mode is on, word is skipped.\n")
+                        continue
+                    
                 if matches:
                     if matches and len(matches) > 0 and matches[0]:
                         if matches[0] in check_if_genre_list:
@@ -526,154 +645,98 @@ def generate_sentence_mirrored(template, word_lists, sfw_nsfw_setting, fiction_r
                             maturity_rating = matches[3]
                         elif matches[3] in check_if_realism_list:
                             fiction_realism_rating = matches[3]
-                            
-                    if random_word == "":
-                            print ("Error in text file, blank line found.\n")
-                            continue
                     
-                    if not matches:
-                        print("Word is without parameters.")
-                        matches = ['E', 'E', 'E', 'E']
-                        if force_genres.get() == "off":
-                            print("Therefore, passes all parameter checks.")
-                            #Optional "Do 'force all parameters' option can be added"
-                            break
+                    found_1 = any(item in matches for item in check_if_maturity_list)
+                    
+                    if not found_1:
+                        print("No maturity rating")
+                    else:    
+                        print("Maturity Rating:", maturity_rating.upper())
+                        if maturity_rating == 'e': #everything
+                            minM = 0
+                            maxM = 100
+                        elif maturity_rating == 'g':
+                            minM = 0
+                            maxM = 50
+                        elif maturity_rating == 'pg':
+                            minM = 10
+                            maxM = 70
+                        elif maturity_rating == 'm':
+                            minM = 45
+                            maxM = 100
+                        elif maturity_rating == 'r':
+                            minM = 60
+                            maxM = 100
+                        elif maturity_rating == 'x':
+                            minM = 70
+                            maxM = 100
+                        elif maturity_rating == 'xx':
+                            minM = 80
+                            maxM = 100
+                        elif maturity_rating == 'xxx':
+                            minM = 90
+                            maxM = 100
+                        if (sfw_nsfw_setting < minM or sfw_nsfw_setting > maxM):
+                            print('Maturity rating disqualification\n')
+                            continue
+                        
+                    found_2 = any(item in matches for item in check_if_realism_list)
+                            
+                    if not found_2:
+                        print ("No fiction/realism rating.")
+                    else:     
+                        print("Realism Rating:", fiction_realism_rating.upper())
+                        if fiction_realism_rating == 'e': #everything
+                            minR = 0
+                            maxR = 100
+                        elif fiction_realism_rating == 'f':
+                            minR = 0 #maybe 45
+                            maxR = 55
+                        elif fiction_realism_rating == 'sf':
+                            minR = 10
+                            maxR = 75
+                        elif fiction_realism_rating == 'nf':
+                            minR = 45
+                            maxR = 100 #maybe 55
+                        
+                        if (fiction_realism_setting < minR or fiction_realism_setting > maxR):
+                            print('Fiction level disqualification\n')
+                            continue  # Restart the inner loop to find another word
+                            
+                    found_3 = any(item in matches for item in check_if_genre_list)
+                            
+                    if not found_3:
+                        print ("Checking genres.") #Or None would do
+                    else:  
+                        if selected_genre != 'e':
+                            print(f"Genre: {get_full_genre_name(selected_genre)}")
                         else:
-                            print("Force genres mode is on, word is skipped.\n")
-                            continue
-                    
-                    if matches:
-                        if matches and len(matches) > 0 and matches[0]:
-                            if matches[0] in check_if_genre_list:
-                                selected_genre = matches[0]
-                            elif matches[0] in check_if_maturity_list:
-                                maturity_rating = matches[0]
-                            elif matches[0] in check_if_realism_list:
-                                fiction_realism_rating = matches[0]
-                                
-                        if matches and len(matches) > 1 and matches[1]:
-                            if matches[1] in check_if_genre_list:
-                                if matches[0] in check_if_genre_list:
-                                    selected_genre_secondary = matches[1]
-                                else:
-                                    selected_genre = matches[1]
-                            elif matches[1] in check_if_maturity_list:
-                                maturity_rating = matches[1]
-                            elif matches[1] in check_if_realism_list:
-                                fiction_realism_rating = matches[1]
-                                
-                        if matches and len(matches) > 2 and matches[2]:
-                            if matches[2] in check_if_genre_list:
-                                if matches[1] in check_if_genre_list or matches[0] in check_if_genre_list:
-                                    selected_genre_secondary = matches[2]
-                                else:
-                                    selected_genre = matches[2]
-                            elif matches[2] in check_if_maturity_list:
-                                maturity_rating = matches[2]
-                            elif matches[2] in check_if_realism_list:
-                                fiction_realism_rating = matches[2]
-
-                        if matches and len(matches) > 3 and matches[3]:
-                            if matches[3] in check_if_genre_list:
-                                if matches[2] in check_if_genre_list or matches[1] in check_if_genre_list or matches[0] in check_if_genre_list:
-                                    selected_genre_secondary = matches[3]
-                                else:
-                                    selected_genre = matches[3]
-                            elif matches[3] in check_if_maturity_list:
-                                maturity_rating = matches[3]
-                            elif matches[3] in check_if_realism_list:
-                                fiction_realism_rating = matches[3]
-                        
-                        found_1 = any(item in matches for item in check_if_maturity_list)
-                        
-                        if not found_1:
-                            print("No maturity rating")
-                        else:    
-                            print("Maturity Rating:", maturity_rating.upper())
-                            if maturity_rating == 'e': #everything
-                                minM = 0
-                                maxM = 100
-                            elif maturity_rating == 'g':
-                                minM = 0
-                                maxM = 50
-                            elif maturity_rating == 'pg':
-                                minM = 10
-                                maxM = 70
-                            elif maturity_rating == 'm':
-                                minM = 45
-                                maxM = 100
-                            elif maturity_rating == 'r':
-                                minM = 60
-                                maxM = 100
-                            elif maturity_rating == 'x':
-                                minM = 70
-                                maxM = 100
-                            elif maturity_rating == 'xx':
-                                minM = 80
-                                maxM = 100
-                            elif maturity_rating == 'xxx':
-                                minM = 90
-                                maxM = 100
-                            if (sfw_nsfw_setting < minM or sfw_nsfw_setting > maxM):
-                                print('Maturity rating disqualification\n')
-                                continue
+                            print("Genre: Any/All")
                             
-                        found_2 = any(item in matches for item in check_if_realism_list)
-                                
-                        if not found_2:
-                            print ("No fiction/realism rating.")
-                        else:     
-                            print("Realism Rating:", fiction_realism_rating.upper())
-                            if fiction_realism_rating == 'e': #everything
-                                minR = 0
-                                maxR = 100
-                            elif fiction_realism_rating == 'nf':
-                                minR = 0
-                                maxR = 55 #maybe 55
-                            elif fiction_realism_rating == 'sf':
-                                minR = 30
-                                maxR = 95
-                            elif fiction_realism_rating == 'f':
-                                minR = 45 #maybe 45
-                                maxR = 100
-                                if (fiction_realism_setting < minR or fiction_realism_setting > maxR):
-                                    print('Fiction level disqualification\n')
-                                    continue  # Restart the inner loop to find another word
-                                
-                        found_3 = any(item in matches for item in check_if_genre_list)
-                                
-                        if not found_3:
-                            print ("Checking genres.") #Or None would do
-                        else:  
-                            if selected_genre != 'e':
-                                print(f"Genre: {get_full_genre_name(selected_genre)}")
+                
+                    # Check if the word's primary genre is not in your list
+                    if selected_genre not in selected_genres and selected_genre != 'e':
+                        uppercase_list = [item.upper() for item in selected_genres]
+                        print(f"Primary genre [{selected_genre.upper()}] -> {uppercase_list}")
+                        print("Does not match genre list")
+                        # Check if the word has a secondary genre and it's not 'e'
+                        if selected_genre_secondary != 'e':
+                            print("Checking current potential word's 2nd genre...")
+                            if selected_genre_secondary in selected_genres:
+                                print(f"[{selected_genre_secondary.upper()}] -> {uppercase_list}")
+                                print("Secondary genre fits genre criteria. Word passes.\n")
+                                break
                             else:
-                                print("Genre: Any/All")
-                                
-                    
-                        # Check if the word's primary genre is not in your list
-                        if selected_genre not in selected_genres and selected_genre != 'e':
-                            uppercase_list = [item.upper() for item in selected_genres]
-                            print(f"Primary genre [{selected_genre.upper()}] -> {uppercase_list}")
-                            print("Does not match genre list")
-                            # Check if the word has a secondary genre and it's not 'e'
-                            if selected_genre_secondary != 'e':
-                                print("Checking current potential word's 2nd genre...")
-                                if selected_genre_secondary in selected_genres:
-                                    print(f"[{selected_genre_secondary.upper()}] -> {uppercase_list}")
-                                    print("Secondary genre fits genre criteria. Word passes.\n")
-                                    break
-                                else:
-                                    print(f"[{selected_genre_secondary.upper()}] -> {uppercase_list}")
-                                    print("Does not match selected genre criteria either.\n")
-                                    continue
-                            else:
-                                # The word has no secondary genre, and the primary genre doesn't meet the criteria
-                                print("Secondary genre unlisted, word non-applicable.\n")
+                                print(f"[{selected_genre_secondary.upper()}] -> {uppercase_list}")
+                                print("Does not match selected genre criteria either.\n")
                                 continue
-                        elif selected_genre in selected_genres:
-                            print("Word passes.\n")
-                            break
+                        else:
+                            # The word has no secondary genre, and the primary genre doesn't meet the criteria
+                            print("Secondary genre unlisted, word non-applicable.\n")
+                            continue
+                    elif selected_genre in selected_genres:
+                        print("Word passes.\n")
+                        break
                 break
             
             else:
@@ -682,61 +745,216 @@ def generate_sentence_mirrored(template, word_lists, sfw_nsfw_setting, fiction_r
 
             # Remove bracket codes from the selected word
             increment_progress_bar(progress_var, placeholder_count_for_progress_bar, number_of_genres)
+            successful_attempts += 1
             print("Input randomization processor complete!\n")
             random_word = random_word.split('`')[0]  # Breaks off the backtick
             template = template.replace(placeholder, random_word, 100)
             
-            
+    template = template.lower()
+    template = replace_words_synonyms(template)# replace ~synoynms
+    template = replace_words_hypernyms(template) # replace >hypernyms
+    template = replace_words_hyponyms(template) # replace ^hyponyms
+    #template = replace_words_antonyms(template) # replace (X)antonyms
     print(f'Number of attempted matches = {number_of_attempts}')
     print(f'Successful parametrical pass-throughs = {successful_attempts}')
     
     progress_var.set(progress_var.get()-progress_var.get()) #Progress bar subtracted by total added
     update_progress_bar(progress_var, progress_var.get())
-    template = process_text(template) #This directs all into process_text function
     return template
 
-#------------------------------End of *both* param checks----------------------------------
-
-#def copy_to_clipboard():
-#    generated_text = output_text.get("1.0", "end-1c")
-#    app.clipboard_clear()
-#    app.clipboard_append(generated_text)
-#    app.update()
+#------------------------------End of *both* param checks---------------------------------- #copy1
 
 
+
+auto_copy_btn = False
+copy_last_output = False
 final_ttc = ""
-def copy_to_clipboard():
+
+def copy_last_output_only():
+    global copy_last_output
+    print("Last output auto-copied")
+        # Rest of the code for copying other formats
     global final_ttc
-    last_format_start = log_text.search(r'----------- Format Code: [01]+\s-----------\n', 'end', backwards=True, regexp=True)
-    
-    if last_format_start:
-        # Find the first occurrence of '{' after the format code
-        first_curly_brace = log_text.search(r'{', last_format_start, stopindex='end')
+    generated_text = output_text.get("1.0", "end-1c")
+    app.clipboard_clear()
+    app.clipboard_append(generated_text)
+    app.update()
+
+def copy_to_clipboard():
+    global copy_last_output, representative_string
+    if copy_last_output == True:
+        copy_last_output_only()
+    else:
+        global final_ttc, number_of_gens, auto_copy_btn
+        last_format_start = log_text.search(fr'{representative_string}', 'end', backwards=True, regexp=True)
         
-        if first_curly_brace:
-            last_format_start = log_text.index(last_format_start)
-            first_curly_brace = log_text.index(first_curly_brace)
+        if last_format_start:
+            # Find the first occurrence of '{' after the format code
+            first_curly_brace = log_text.search(r'{', last_format_start, stopindex='end')
             
-            text_to_copy = log_text.get(first_curly_brace, 'end')
-            format_code = log_text.get(last_format_start, first_curly_brace)
-            format_code_match = re.search(r'Format Code: ([01]+)', format_code)
+            if first_curly_brace:
+                last_format_start = log_text.index(last_format_start)
+                first_curly_brace = log_text.index(first_curly_brace)
+                
+                text_to_copy = log_text.get(first_curly_brace, 'end')
+                format_code = log_text.get(last_format_start, first_curly_brace)
+                format_code_match = re.search(fr'Cuplet Code:', format_code)
+                
+                
+                if number_of_gens <= 1:
+                    final_ttc = text_to_copy.replace("}\n\n", "").replace("\n", "").replace("{", "").replace("     ","").replace("    ","").replace(".","").replace("<>", "\n")
+                else:
+                    if sep_type_linebreaks == False and sep_type_comma == False and sep_type_curly == True:
+                        if len(format_code)>50: # Do the following below if pipebars True and text length long
+                            edit0_ttc = text_to_copy.replace("|\n", "|") #laid out example of .replace, can be quished
+                            edit1_ttc = edit0_ttc.replace("}\n\n", "}")
+                            edit2_ttc = edit1_ttc.replace("\n\n","\n")
+                            edit3_ttc = edit2_ttc.replace("     ","")
+                            edit4_ttc = edit3_ttc.replace("    ","")
+                            final_ttc = edit4_ttc.replace("|","|    ")
+                        else: # Do the following below if pipebars True and text length short
+                            edit0_ttc = text_to_copy.replace("}\n\n", "}") #laid out example of .replace, can be quished
+                            edit1_ttc = edit0_ttc.replace("\n", "")
+                            edit2_ttc = edit1_ttc.replace("     ","")
+                            edit3_ttc = edit2_ttc.replace("    ","")
+                            edit4_ttc = edit3_ttc.replace("|","|    ")
+                            final_ttc = edit4_ttc.replace(".","")
+                    elif sep_type_linebreaks == False and sep_type_comma == True and sep_type_curly == False:
+                        final_ttc = text_to_copy.replace("}\n\n", "}").replace("|\n",", ").replace("\n", "").replace("     ","").replace("    ","").replace(".","")
+                    elif sep_type_linebreaks == True and sep_type_comma == False and sep_type_curly == False:
+                        final_ttc = text_to_copy.replace("}\n\n", "").replace("\n", "").replace("|","\n\n").replace("{", "").replace("     ","").replace("    ","").replace(".","")
+                final_ttc = final_ttc.replace('<>','\n')
+                if auto_copy_btn == False:
+                    print(f"\nProcessed and copied text: \n {final_ttc}")
+                    print(f"Pulled from cuplet:\n\n {gen_tag.strip()}_{session_tag}-{gen_cuplet}")
+                elif auto_copy_btn == True:
+                    print(f"\nLast series of outputs auto-copied.")
+
+                app.clipboard_clear()
+                app.clipboard_append(final_ttc)
+                app.update()  # Required to update the clipboard content
             
-            print(f"From:\n {format_code_match.group(0)}\n Processing: \n   {text_to_copy}")
-            if sep_type_linebreaks == False and sep_type_comma == False and sep_type_curly == True:
-                edit1_ttc = text_to_copy.replace("}\n\n", "}")
-                edit2_ttc = edit1_ttc.replace("\n", "")
-                edit3_ttc = edit2_ttc.replace("     ","")
-                edit4_ttc = edit3_ttc.replace("    ","")
-                edit5_ttc = edit4_ttc.replace("|","| ")
-                final_ttc = edit5_ttc.replace(".","")
-            elif sep_type_linebreaks == False and sep_type_comma == True and sep_type_curly == False:
-                final_ttc = text_to_copy.replace("}\n\n", "}").replace("\n", "").replace("     ","").replace("    ","").replace(".","").replace("|",", ")
-            elif sep_type_linebreaks == True and sep_type_comma == False and sep_type_curly == False:
-                final_ttc = text_to_copy.replace("}\n\n", "").replace("\n", "").replace("{", "").replace("     ","").replace("    ","").replace(".","").replace("|","\n")
-            print(f"Result {final_ttc}")
-            app.clipboard_clear()
-            app.clipboard_append(final_ttc)
-            app.update()  # Required to update the clipboard content
+#def copy_last_output_only():
+#    global final_ttc
+#    last_format_start = log_text.search(r'|', 'end', backwards=True, regexp=True)
+#    text_to_copy = log_text.index(last_format_start)
+#    final_ttc = text_to_copy.replace("<>", "\n")
+#    app.clipboard_clear()
+#    app.clipboard_append(final_ttc)
+#    app.update()  # Required to update the clipboard content
+
+existing_synonyms = {}
+SYNONYM_FILE = 'prompts_and_text/synonym_dict.txt'
+
+# Load existing synonyms from file
+try:
+    with open(SYNONYM_FILE, "r") as read_synonym_file:
+        update_synonym_data = read_synonym_file.read()
+        existing_synonyms = eval(update_synonym_data)
+except FileNotFoundError:
+    pass  # If the file doesn't exist yet, it's okay
+
+def replace_words_synonyms(input_sentence_start):
+    global existing_synonyms, SYNONYM_FILE
+    words = re.split(r'([,\s.!?-]+)', input_sentence_start)
+
+    for i in range(len(words)):
+        if words[i].startswith("~") and len(words[i]) > 1:
+            all_synonyms = []  # Initialize the list of all synonyms
+            word_to_replace = words[i][1:]
+
+            if word_to_replace in existing_synonyms:
+                print(f'Synonym existing in session cache.')
+                random_synonym = random.choice(existing_synonyms[word_to_replace])
+                words[i] = random_synonym
+            else:
+                print(f'Synonyms for {word_to_replace} unknown, using a 15-site API search.')
+                synonym = Synonyms(word_to_replace)
+                synonym_results = synonym.find_synonyms()
+                existing_synonyms[word_to_replace] = synonym_results  # Update with the actual value
+                print(synonym_results)
+                random_synonym = random.choice(synonym_results)
+                words[i] = random_synonym
+                with open(SYNONYM_FILE, "w") as file:
+                    file.write(f"{existing_synonyms}")
+
+    return "".join(words)
+
+existing_hypernyms = {}
+HYPERNYM_FILE = 'prompts_and_text/hypernym_dict.txt'
+
+# Load existing hypernyms from file
+try:
+    with open(HYPERNYM_FILE, "r") as read_hypernym_file:
+        update_hypernym_data = read_hypernym_file.read()
+        existing_hypernyms = eval(update_hypernym_data)
+except FileNotFoundError:
+    pass  # If the file doesn't exist yet, it's okay
+
+def replace_words_hypernyms(input_sentence_start):
+    global existing_hypernyms, HYPERNYM_FILE
+    words = re.split(r'([,\s.!?-]+)', input_sentence_start)
+
+    for i in range(len(words)):
+        if words[i].startswith("^") and len(words[i]) > 1:
+            all_hypernyms = []  # Initialize the list of all hypernyms
+            word_to_replace = words[i][1:]
+
+            if word_to_replace in existing_hypernyms:
+                print(f'Hypernym existing in session cache.')
+                random_hypernym = random.choice(existing_hypernyms[word_to_replace])
+                words[i] = random_hypernym
+            else:
+                print('Hypernym unknown, using a 15-website API search.')
+                hypernym = Hypernyms(word_to_replace)
+                hypernym_results = hypernym.find_hypernyms()
+                existing_hypernyms[word_to_replace] = hypernym_results  # Update with the actual value
+                print(hypernym_results)
+                random_hypernym = random.choice(hypernym_results)
+                words[i] = random_hypernym
+                with open(HYPERNYM_FILE, "w") as file:
+                    file.write(f"{existing_hypernyms}")
+
+    return "".join(words)
+
+existing_hyponyms = {}
+HYPONYM_FILE = 'prompts_and_text/hyponym_dict.txt'
+
+# Load existing hyponyms from file
+try:
+    with open(HYPONYM_FILE, "r") as read_hyponym_file:
+        update_hyponym_data = read_hyponym_file.read()
+        existing_hyponyms = eval(update_hyponym_data)
+except FileNotFoundError:
+    pass  # If the file doesn't exist yet, it's okay
+
+def replace_words_hyponyms(input_sentence_start):
+    global existing_hyponyms, HYPONYM_FILE
+    words = re.split(r'([,\s.!?-]+)', input_sentence_start)
+
+    for i in range(len(words)):
+        if words[i].startswith(">") and len(words[i]) > 1:
+            all_hyponyms = []  # Initialize the list of all hyponyms
+            word_to_replace = words[i][1:]
+
+            if word_to_replace in existing_hyponyms:
+                print(f'Hyponym existing in session cache.')
+                random_hyponym = random.choice(existing_hyponyms[word_to_replace])
+                words[i] = random_hyponym
+            else:
+                print('Hyponym unknown, using a 15-website API search.')
+                hyponym = Hyponyms(word_to_replace)
+                hyponym_results = hyponym.find_hyponyms()
+                existing_hyponyms[word_to_replace] = hyponym_results  # Update with the actual value
+                print(hyponym_results)
+                random_hyponym = random.choice(hyponym_results)
+                words[i] = random_hyponym
+                with open(HYPONYM_FILE, "w") as file:
+                    file.write(f"{existing_hyponyms}")
+
+    return "".join(words)
+
+
 
 #-------------------------------REFRESH WORD LIST-----------------------------------------
 
@@ -765,11 +983,47 @@ def refresh_word_lists_2(additional_folders):
                     
 #-------Generate new sentence------
 #----------------------------------
+
 read_output_on_screen_tts = False
-def generate_new_sentence():
-    global var_radio
-    global number_of_gens
-    global read_output_on_screen_tts
+fn_running = False
+backspace = False
+#amt_chars = 0
+words_to_display_main = []
+play_msg = ['welcome']
+msg_queue = 0
+v_len = 0
+already_checking = False
+last_item = []
+wait_or_max_wait = 0
+multiples = False
+amt_left_gen = 0
+button_first_pushed = False
+    
+def generate_new_sentence_thread():
+    global thread1, read_output_on_screen_tts, wait_or_max_wait
+    if read_output_on_screen_tts == True:
+        generate_new_sentence()
+    elif read_output_on_screen_tts == False:
+        thread1 = threading.Thread(target=generate_new_sentence) #this puts this task on a diff thread
+        thread1.start() #and causes it not to create delay (rotating cursor) in the main GUI
+
+thread = threading.Thread(target=None)
+def generate_loop():
+    global thread, multiples
+    if multiples == True:
+        thread = threading.Thread(target=generate_new_sentence) #this puts this task on a diff thread
+        thread.start() #and causes it not to create delay (rotating cursor) in the main GUI
+
+
+def generate_new_sentence(): #gen1 (for ctrl+f or 'find')
+    global var_radio, number_of_gens,read_output_on_screen_tts, id_string, fn_running, backspace, play_msg, multiples, amt_left_gen
+    print(f"Number of multiples = {amt_left_gen}")
+    #stop_top_box()
+    #if fn_running == False:
+    backspace = False
+    if not read_output_on_screen_tts:
+        play_msg.append('gen') #add message one to the list
+        main_display_thread() #play the top area with a message
     if number_of_gens == 0:
         refresh_word_lists()
     number_of_gens += 1
@@ -782,26 +1036,136 @@ def generate_new_sentence():
             new_sentence = generate_sentence_mirrored(input_sentence, word_lists, sfw_nsfw_setting, fiction_realism_setting, selected_genres, progress_var)
         else:
             new_sentence = generate_sentence_variegated(input_sentence, word_lists, sfw_nsfw_setting, fiction_realism_setting, selected_genres, progress_var)
+        
+        new_sentence = process_text(new_sentence) #This directs all into process_text function
         output_text.configure(state=tk.NORMAL)
         output_text.delete("1.0", tk.END)  # Clear the current output
         output_text.insert(tk.END, new_sentence)
         output_text.configure(state=tk.DISABLED)
+        if read_output_on_screen_tts == False:
+            backspace = True
         save_input()
         #Make an area for this
         print(f'Generations produced for current format = {number_of_gens}\n') # Create a count
-        change_color_command()  
+        change_color_command()
         save_settings_to_file()
         save_template_to_file()
+        input_label()
+        if auto_copy_btn == True or copy_last_output == True:
+            copy_to_clipboard()
         if read_output_on_screen_tts == True:
             read_text(read_output_on_screen_tts)
+        if amt_left_gen > 0:
+            multiples = True
+            generate_multiple_sentences(amt_left_gen)
+            
+        
+with open("prompts_and_text/username.txt", "r") as name_file:
+    username_code = name_file.read()
+    exec(username_code, globals(), locals())
+        
+def main_display_thread():
+    global thread2, fn_running
+    thread2 = threading.Thread(target=main_display, args=())
+    thread2.start()
+#vers1
+def main_display():
+    global wait_or_max_wait, backspace, words_to_display_main, fn_running, main_info, username, msg_queue, play_msg, already_checking, last_item, v_len, display_gen_ID, individual_gen_ID
+    if play_msg:
+        last_item = play_msg.pop()
+    if last_item == 'gen':
+        wait_or_max_wait = 10000
+        words_to_display_main.append(f"{gen_cuplet}-{gen_tag.strip()}_{display_gen_ID}")
+    elif last_item == 'tag_change':
+        wait_or_max_wait = 100
+        backspace = False
+        words_to_display_main.append(f"New tag name registered: {gen_tag.strip()}.")
+    elif last_item == 'tts':
+        wait_or_max_wait = 10000
+        backspace = False
+        words_to_display_main.append(f"Text-to-speech mode on.")
+    elif last_item == 'welcome':
+        wait_or_max_wait = 150
+        #v_len = len(f"Howdy, {username}!")
+        words_to_display_main.append(f"Welcome, {username}.")
+        words_to_display_main.append(f"{gen_tag}: User Tag")
+        words_to_display_main.append(f"{session_tag}: Session Key")
+        words_to_display_main.append(f"{gen_cuplet}: Cuplet Identifier")
+        display_gen_ID = format(individual_gen_ID,'09_b')
+        words_to_display_main.append(f"{display_gen_ID}: Generation Number")
+        
     
+    msg_queue += 1
+    if already_checking == False:
+        check_if_ready()
     
+def check_if_ready():
+    global fn_running, already_checking, test_displays, msg_queue, v_len
+    already_checking = True
+    if fn_running:
+        time.sleep(5)
+        check_if_ready()
+    else:
+        display_p0_messages() # That means she's ready
+
+def display_p0_messages():
+    global wait_or_max_wait, words_to_display_main, fn_running, msg_queue, main_info, current_display_index, play_msg, already_checking, v_len, backspace
+    already_checking = False
+    fn_running = True
+    main_info.delete("1.0", tk.END)
+    
+    for text in words_to_display_main:
+        for char in text:
+            v_len -= 1
+            main_info.insert(tk.END, char)
+            main_info.yview(tk.END)
+            main_info.update_idletasks()
+            
+            time.sleep(0.004)
+            
+            amt_time = 0.15
+        
+        for _ in range(wait_or_max_wait):
+            if backspace == False:
+                time.sleep(0.01)
+            else:
+                break
+    
+        for _ in text:
+            main_info.delete("end-2c", "end-1c")
+            main_info.yview(tk.END)
+            main_info.update_idletasks()
+
+            time.sleep(0.001)
+
+    words_to_display_main = []  # Clear the list after processing all elements
+    msg_queue -= 1  # Remove the queue by one
+
+    fn_running = False
+    
+
+
+def generate_multiple_sentences_start(times): # notice the word 'start' appended, not same fn as below
+    global button_first_pushed
+    button_first_pushed = True
+    generate_multiple_sentences(times)
 # Function to generate multiple sentences
 def generate_multiple_sentences(times):
-    for _ in range(times):
-        generate_new_sentence()
+    global play_msg, multiples, button_first_pushed, amt_left_gen
+    if button_first_pushed == True:
+        amt_left_gen += times
+        button_first_pushed = False
+    
+    multiples = True
+    if multiples == True:
+        if amt_left_gen > 0:
+            generate_loop()
+            amt_left_gen -= 1
 
 
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
 def open_manufacturing_plant(event=None):
 
     plant_window = ttk.Toplevel(app)
@@ -899,7 +1263,8 @@ style = ttk.Style()
 # Set the focus highlight borderwidth to 0 to remove it for all TButton widgets ('1252x800')
 style.map("TButton", background=[("active", "!disabled", light_blue)], borderwidth=[("active", -3), ("focus", -1)], bordercolor='black')
 style.configure("TButton", background=button_color, foreground=text, bordercolor=button_color, border_width=-2)
-app.geometry("1480x800")
+
+app.geometry("1588x800")
 app.config(bg=bg)
 
 # Create a canvas with a black background
@@ -936,7 +1301,7 @@ def open_discord(event):
 
 discordImg = PhotoImage(file='assets/imgs/discord4.png')
 discordLabel = ttk.Label(text=None, image=discordImg, background='black', cursor="hand2")
-discordLabel.place(y=35, x=1165)
+discordLabel.place(y=35, x=1485)
 
 # Bind a click event to open the link when clicked
 discordLabel.bind("<Button-1>", lambda event: open_discord(event))
@@ -997,7 +1362,7 @@ entry.place(x=xx+x5+165, y=yy+y5+152)
 
 A1_parts=[]#These lists are in the below file.
 # Load the template from the file (*)<---
-with open("assets/logs/template_pieces_randomization.txt", "r") as template_file:
+with open("prompts_and_text/template_pieces.txt", "r") as template_file:
     template_code = template_file.read()
     exec(template_code, globals(), locals())
     
@@ -1050,7 +1415,7 @@ def add_random_sentence():
 
 
     
-#-----------------------------Output assets/logs/logs.txt onto screen------------------------------
+#-----------------------------Output prompts_and_text/logs.txt onto screen------------------------------
 
 y2=360
 x2=-577
@@ -1071,15 +1436,16 @@ def update_log_text():
     found_pattern = False
     try:
         while line_count <= 200:  # Adjust the upper limit as needed
-            with open("assets/logs/logs.txt", 'r') as file:
+            with open("prompts_and_text/logs.txt", 'r') as file:
                 lines = file.readlines()[-line_count:]
                 line_count += 5
             # Check for the presence of the pattern
-            pattern = re.compile(r'format\s+code', re.IGNORECASE)
-            if any(pattern.search(line) for line in lines):
-                found_pattern = True
-                break
-
+            pattern = re.compile(r'[01_]{10}', re.IGNORECASE)
+            for line in lines:
+                match = pattern.search(line)
+                if match:
+                    found_pattern = True
+                    break
         if found_pattern:
                 log_text.delete(1.0, ttk.END)
                 log_text.insert(ttk.END, ''.join(lines))
@@ -1094,21 +1460,76 @@ update_log_text()
 y3=-5
 x3=-112
 #generate_img = PhotoImage(file="assets/imgs/btn27a.png")
-# A button to send input to output
-generate_button = CTkButton(app,  corner_radius=0, bg_color=button_color, border_width=1, 
-                            border_color=btn_border, hover_color=highlight_text, font=btn_font_gen,
+# A button to send input to output            #gen1
+generate_button = CTkButton(app, font=btn_font, corner_radius=0, bg_color=button_color, border_width=1, 
+                            border_color=btn_border, hover_color=highlight_text, 
                             fg_color=button_color, text_color=text, width=298, text="Send to Output", 
-                            command=generate_new_sentence)
+                            command=generate_new_sentence_thread)
 generate_button.place(y=y3+y5+283, x=x3+x5+430)
 # Entry field for specifying the number of sentences to generate
 num_sentences_entry = tk.Text(app, width=2, height=1, font=('Arial', 8)) #width=28, corner_radius=1, border_width=1, border_color=light_blue
 num_sentences_entry.insert('1.0', "03")
 num_sentences_entry.place(y=y3+y5+283, x=x3+x5+281)
+
+#tag1
+total_str = 0
+chars = ''
+def gen_fix_char_amt(event):
+    #print("gen_fix_char_amt function begins")
+    global gen_tag_entry
+    global avail_chars
+    chars = gen_tag_entry.get("1.0", tk.END)
+    #print(f"{chars} = chars")
+    if len(chars) == 0:
+    #    amt_diff = (5 - len(chars))
+    #    print(amt_diff)
+    #    print("smaller than 4")
+    #    while len(chars) < 5:
+            chars += random.choice(string.ascii_letters)
+    #        chars = chars.replace("\n", "")
+    #        print(f'new chars = {chars}')
+    #        gen_tag_entry.delete("1.0", tk.END)
+    #        gen_tag_entry.insert(tk.END, chars)
+    #        app.update_idletasks
+    #        time.sleep(0.02)
+    #        if len(chars) == 4:
+    #           break
+    if len(chars) >= 5:
+        print("len(chars) > 5")
+        chars = chars[:4]
+        gen_tag_entry.delete("1.0", tk.END)
+        chars = chars.replace("\n", "")
+        gen_tag_entry.insert("1.0", chars)
+        play_msg.append('tag_change')
+        main_display_thread()
+        app.update_idletasks
+    gen_on_change()
+        
+
+def gen_on_change():
+    current_tag = gen_tag_entry.get("1.0", tk.END)
+    current_tag = current_tag.strip()
+    current_tag = current_tag.replace("\n", "")
+    gen_tag_entry.delete("1.0", tk.END)
+    gen_tag_entry.insert("end", current_tag.upper())
+    print(current_tag)
+    print("is current tag, capitalize function over")
+    save_input()
+
+
+gen_tag_entry = ttk.Text(app, width=6, height=1, font=('Arial Black', 8))
+gen_tag_entry.insert('1.0', "ABCD")
+gen_tag_entry.configure(background=button_color, foreground=orange)
+gen_tag_entry.place(y=314, x=412) #(y=283, x=429)
+
+
+gen_tag_entry.bind("<FocusOut>", gen_fix_char_amt)
+
 #command=generate_new_sentence, border_width=3, border_color=text, bg_color=bg, fg_color=bg, text_color=text, hover_color=green)
 multiple_button = CTkButton(app, font=btn_font, corner_radius=0, bg_color=button_color, border_width=1, 
                             border_color=btn_border, hover_color=highlight_text, 
                             fg_color=button_color, text_color=text, width=120, text="Multiples", 
-                            command=lambda: generate_multiple_sentences(int(num_sentences_entry.get('1.0', 'end-1c'))))
+                            command=lambda: generate_multiple_sentences_start(int(num_sentences_entry.get('1.0', 'end-1c'))))
 multiple_button.place(y=y3+y5+283, x=x3+x5+309) #x=572 for perfect alignment with other button in cur location
 
 
@@ -1119,29 +1540,31 @@ def save_cached_template_to_file():
     if text_edited == True:
         text_to_cache = entry.get("1.0", tk.END)
         print("Last edited text in the input field was saved")
-    with open('assets/logs/template_cache.txt', 'w') as cache:  # Truncate the file
+    with open('prompts_and_text/template_cache.txt', 'w') as cache:  # Truncate the file
         cache.write(text_to_cache)
         text_edited = False
         
-current_line = 1
+
 
 def text_is_edited(event=None):
     if event:
         global text_edited
         text_edited = True
         line_number_label.config(text=f"Edit")
-
+        app.after(1, center_label) # waits one millisecond, to give things enough time to register new position
 app.bind('<KeyRelease>', text_is_edited)
 
 def load_from_template_cache():
+    line_number_label.config(text=f"Retrieval") #label bit
     try:
-        with open('assets/logs/template_cache.txt', "r") as cache:
+        with open('prompts_and_text/template_cache.txt', "r") as cache:
             lines = cache.readlines()
             # Remove leading/trailing white spaces and empty lines
             cleaned_lines = [line.strip() for line in lines if line.strip()]
             last_edited_text = "\n".join(cleaned_lines)
             entry.delete("1.0", tk.END)
             entry.insert("1.0", last_edited_text)
+            app.after(3, center_label) #label bit
             return last_edited_text
     except FileNotFoundError:
         return ""
@@ -1154,8 +1577,11 @@ def load_left_line():
     global current_line
     if current_line > 1:
         current_line -= 1
+    else:
+        current_line = len(template_lines)
     update_text_field()
     save_settings_to_file()
+    app.after(1, center_label)
 
 def load_right_line():
     global text_edited
@@ -1165,46 +1591,63 @@ def load_right_line():
     global current_line
     if current_line < len(template_lines):
         current_line += 1
+    elif current_line == len(template_lines):
+        current_line -= len(template_lines)
+        current_line += 1 #so line isn't at 0 of _
     update_text_field()
     save_settings_to_file()
+    app.after(1, center_label)
+    
+def input_label():
+    line_number_label.config(text=f"Input")
+    app.after(1, center_label)
 
 def update_text_field():
     entry.delete(1.0, tk.END)  # Clear the text field
     entry.insert(tk.END, template_lines[current_line - 1])  # Load the current line
-    line_number_label.config(text=f"Line {current_line} of {len(template_lines)}")
+    line_number_label.config(text=f"Input: {current_line} of {len(template_lines)}")
+    app.after(1, center_label)
                     #config = tk. configure = CTk
+def center_label():
+    label_width = line_number_label.winfo_width()
+    x_position = 364  # Adjust this value based on your layout
+    center_x_position = x_position - (label_width//2)
+    line_number_label.place(x=center_x_position, y=y3 + y5 + 347 + y10)               
+                    
 def save_template_to_browse():
     global current_line
     text_to_save = entry.get("1.0", tk.END)
     cleaned_text = text_to_save.strip()
-    with open('assets/logs/add_templates.txt', 'a') as browse_templates_file:
+    with open('prompts_and_text/_prompts.txt', 'a') as browse_templates_file:
         browse_templates_file.write('\n')
         browse_templates_file.write(cleaned_text)
-    print(f"Current template written into add_templates.txt") #my templates? or {name}_templates?
+    print(f"Current template written into _prompts.txt") #my templates? or {name}_templates?
     current_line = len(template_lines) + 1
     read_and_update_template_browser()
     update_text_field()
         
 def read_and_update_template_browser():
     global template_lines
-    with open('assets/logs/add_templates.txt', 'r') as browse_templates_file: # Update template_lines list
+    with open('prompts_and_text/_prompts.txt', 'r') as browse_templates_file: # Update template_lines list
         template_lines = browse_templates_file.read().split('\n')
-    line_number_label.config(text=f"Line {current_line} of {len(template_lines)}") # Update the label
+    line_number_label.config(text=f"Input: {current_line} of {len(template_lines)}")
+    app.after(1, center_label) # Update the label
+    
                     #config = tk. configure = CTk
-with open('assets/logs/add_templates.txt', 'r') as browse_templates_file:
+with open('prompts_and_text/_prompts.txt', 'r') as browse_templates_file:
     template_lines = browse_templates_file.read().split('\n')
+    app.after(1, center_label)
 
 def delete_current_template():
     global current_line
-
-    with open('assets/logs/add_templates.txt', 'r') as browse_templates_file:
+    with open('prompts_and_text/_prompts.txt', 'r') as browse_templates_file:
         lines = browse_templates_file.readlines()
 
     if 0 < current_line <= len(lines):
         del lines[current_line - 1]
         current_line = min(current_line, len(lines))
 
-        with open('assets/logs/add_templates.txt', 'w') as browse_templates_file:
+        with open('prompts_and_text/_prompts.txt', 'w') as browse_templates_file:
             # Remove empty lines
             lines = [line.strip() for line in lines if line.strip()]
             browse_templates_file.write('\n'.join(lines))
@@ -1214,10 +1657,17 @@ def delete_current_template():
 
 
 
-y10=-225 #-250 #-230
-    
-line_number_label = ttk.Label(app, foreground=text, background=bg, text=f"Line {current_line} of {len(template_lines)}")
-line_number_label.place(x=x3+x5+322, y=y3+y5+345+y10) #, text_color=text
+y10=-214 #-250 #-230
+
+# GUI setup
+
+gen_ID_label_info = f"Output ID: {gen_tag.strip()}-{session_tag}-{gen_cuplet}-{display_gen_ID}"
+gen_ID_label = ttk.Label(app, foreground=text, background=button_color, text=gen_ID_label_info, font=("Arial", 8))
+gen_ID_label.place(x=780, y=82)
+
+line_number_label = ttk.Label(app, foreground=text, background=button_color, text=f"Loading...")
+line_number_label.place(x=x3+x5+330, y=y3+y5+347+y10) #, text_color=text
+
 
 left_img = PhotoImage(file="assets/imgs/right5.png")
 browse_left_button = tk.Button(app, command=load_left_line, highlightthickness= 0,
@@ -1234,13 +1684,13 @@ open_last_edited_button = CTkButton(app, font=btn_font, corner_radius=0, bg_colo
                             border_color=btn_border, hover_color=highlight_text, 
                             fg_color=button_color, text_color=text, width=128,
                             text='Retrieve Last Edited', command=load_from_template_cache, image=None)
-open_last_edited_button.place(x=x3+x5+430, y=y3+y5+345+y10)
+open_last_edited_button.place(x=x3+x5+434, y=y3+y5+345+y10)
 
 save_template_button = CTkButton(app, font=btn_font, corner_radius=0, bg_color=button_color, border_width=1, 
                             border_color=btn_border, hover_color=highlight_text, 
                             fg_color=button_color, text_color=text, width=69,
                             text='Save', command=save_template_to_browse)
-save_template_button.place(x=x3+x5+560, y=y3+y5+345+y10)
+save_template_button.place(x=x3+x5+562, y=y3+y5+345+y10)
 
 delete_template_button = CTkButton(app, font=btn_font, corner_radius=0, bg_color=button_color, border_width=1,
                                   border_color=btn_border, hover_color=highlight_text,
@@ -1249,10 +1699,11 @@ delete_template_button = CTkButton(app, font=btn_font, corner_radius=0, bg_color
 delete_template_button.place(x=x3+x5+630, y=y3+y5+345+y10)
 
 
+style.configure("TProgressbar", foreground='black', background='red', thickness=30)
 
 progress_var = tk.DoubleVar()
-progress_bar = ttk.Progressbar(app, variable=progress_var)
-progress_bar.place(x=0, y=yy+770, relwidth=1)
+progress_bar = ttk.Progressbar(app, style="TProgressbar", variable=progress_var)
+progress_bar.place(x=xx+0, y=yy+770, relwidth=1)
 #progress_bar.pack(fill="x") 
 
 #progress_bar.pack(side="bottom", fill="x")
@@ -1272,11 +1723,24 @@ output_text = CTkTextbox(app, font=('Segoe UI Variable Small Semibold', 20),
                    corner_radius=0,
                    fg_color=bg,
                    text_color=light_blue, bg_color=text,
-                   width=454, height=98,
+                   width=454, height=118,
                    wrap="word")
 output_text.place(x=xx+x4+x7, y=yy+y4+y7)
 
-# Create a (centered try) output label
+main_info = CTkTextbox(app, font=('Segoe UI Variable Small Semibold', 24),
+                   #height=5, width=32,
+                   corner_radius=0,
+                   fg_color=bg,
+                   text_color=light_blue, bg_color=text,
+                   width=500, height=50,
+                   wrap="word")
+main_info.place(x=xx+782, y=yy+10) #x=xx+500, y=yy+10)
+
+
+        
+
+
+
 label_font = ('Helvetica', 12)
 output_field_label = CTkLabel(app, text="Output", height=12, font=label_font, text_color=text_A, bg_color=text_panel_A)
 output_field_label.place(x=x4+128, y=y4-15+y7)
@@ -1293,25 +1757,94 @@ output_field_label.place(x=x4+128, y=y4-15+y7)
 #Roll for each #Roll once, apply broadly
 #Possibly change varigated/mirrored to that^^^^ Label + Segmented Button vary1
 
-var_radio = ttk.StringVar(value="Variegated")
+auto_copy_btnvar = ttk.StringVar(value="Manual")
 
-def print_new_value(switch_to):
-    print(f"Switching to: {switch_to}")
+def auto_copy_command(value, *args):
+    auto_copy_btnvar.set(value)
+    global auto_copy_btn, copy_last_output
+    if value == "Auto":
+        auto_copy_btn = True
+        copy_last_output = False
+        copy_button.configure(app, state='disabled')
+        print("\nSetting Change: Entire last set of generation data will be auto-copied to the clipboard, even while app is minimized. It's format as far as seperators goes will be based on the user's current selection for that setting.")
+    if value == "Norm":
+        auto_copy_btn = False
+        copy_last_output = False
+        copy_button.configure(app, state='normal')
+        print("\nSetting Change: State of copied data will be determined by the user, based on the copying options below the output area.")
+    if value == "Last":
+        auto_copy_btn = False
+        copy_last_output = True 
+        copy_button.configure(app, state='normal')
+        print("\nSetting Change: Last output in a series will be autocopied to clipboard, even while app is minimized.")
+
+auto_copy_btn_var = customtkinter.StringVar(value="Norm")
+auto_copy_buttons = customtkinter.CTkSegmentedButton(app, values=
+                                                     ["Auto", "Norm", "Last"],
+                                                     command=auto_copy_command, variable=auto_copy_btn_var,
+                                                     unselected_color = text_panel_A,
+                                                     fg_color= bg,
+                                                     text_color= 'black',
+                                                     unselected_hover_color = yellow,
+                                                     selected_hover_color= green,
+                                                     selected_color= dim_text,
+                                                     bg_color= bg,
+                                                     #corner_radius= 0,
+                                                     )
+
+auto_copy_buttons.place(x=x3+x5+281, y=y3+y5+312)
+
+#copy_last_button = CTkButton(app, font=btn_font, corner_radius=0, bg_color=button_color, border_width=1, 
+ #                           border_color=btn_border, hover_color=highlight_text, 
+ #                           fg_color=button_color, text_color=text, width=128,
+ #                           text='Copy Last', command=copy_last_output_only, image=None)
+#copy_last_button.place(x=80, y=50)
+
+
+
+long_cuplets_btnvar = ttk.StringVar(value="Per Format")
+def cuplet_command(value, *args):
+    long_cuplets_btnvar.set(value)
+    global long_cuplets
+    if value == "Continuous":
+        long_cuplets = True
+        new_grouping_button.configure(app, state='disabled')
+        print("Setting Changed: Continuous cuplets is on. Even if input is change, output cuplet will be unified, until turned off.")
+    if value == "Per Format":
+        long_cuplets = False
+        new_grouping_button.configure(app, state='normal')
+        print("Setting Changed: Continuous cuplets is off. Cuplets will form if any input is altered, or a new cuplet is inducted manually")
+
+long_cuplets_buttons = customtkinter.StringVar(value="Per Format")
+long_cuplets_buttons = customtkinter.CTkSegmentedButton(app, values=
+                                                     ["Continuous", "Per Format"],
+                                                     command=cuplet_command, variable=long_cuplets_btnvar,
+                                                     unselected_color = text_panel_A,
+                                                     fg_color= bg,
+                                                     text_color= 'black',
+                                                     unselected_hover_color = yellow,
+                                                     selected_hover_color= green,
+                                                     selected_color= dim_text,
+                                                     bg_color= bg,
+                                                     #corner_radius= 0,
+                                                     )
+
+long_cuplets_buttons.place(x=x5+167, y=yy+y5+y7+714)
+
+#--------------------------------------------------------------------------------------------
+
+var_radio = ttk.StringVar(value="Variegated")
 
 def on_off_radio(value, *args):
     var_radio.set(value)
     global switch_to
     if value == "Variegated":
-        switch_to = "Variegated"
-        print_new_value(switch_to)
-        print("Repeated placeholds will each have an equal roll and will (more than likely) be different from those prior, that share the same name.")
+        print(f"\nSwitching to: {value}\n\n Each individual placeholder outcome will be different, even if they are sourced from the same DiceWord.")
     if value == "Locked In":
-        switch_to = "Locked In"
-        print_new_value(switch_to)
-        print("Repeated placeholders will hold the same outcome as the ones prior to them. If you'd like to use this feature while also using another placeholder of the same type that differentiates, consider copying the file and adding a marker to the .txt file that delineates it from the original.")
+        print(f"\nSwitching to: {value}\n\n When a single DiceWord type is repeated in the input area, it's output values will all mirror one another.")
 
-segemented_button_var = customtkinter.StringVar(value="Variegated")
-segemented_button = customtkinter.CTkSegmentedButton(app, values=
+segmented_button_var = customtkinter.StringVar(value="Variegated")
+segmented_button = customtkinter.CTkSegmentedButton(app, values=
                                                      ["Variegated", "Locked In"],
                                                      command=on_off_radio, variable=var_radio,
                                                      unselected_color = text_panel_A,
@@ -1323,7 +1856,9 @@ segemented_button = customtkinter.CTkSegmentedButton(app, values=
                                                      bg_color= bg
                                                      )
 
-segemented_button.place(x=x3+x5+584, y=y3+y5+312)
+segmented_button.place(x=x3+x5+584, y=y3+y5+312)
+
+
 
 sep_type_comma, sep_type_linebreaks, sep_type_curly = False, False, True
 def copy_processor_callback(value):
@@ -1332,17 +1867,17 @@ def copy_processor_callback(value):
         sep_type_comma = True
         sep_type_linebreaks = False
         sep_type_curly = False
-        print("Setting Change: Processing alterations set to individuate generations by commas.")
+        print("\nSetting Change: A copied grouping of generations will seperate themselves by commas.")
     elif value == "    Line Breaks    ":
         sep_type_comma = False
         sep_type_linebreaks = True
         sep_type_curly = False
-        print("Setting Change: Processing alterations set to individuate generations by line breaks.")
+        print("\nSetting Change: A copied grouping of generations will seperate themselves by line breaks.")
     elif value == "     Pipe Bars     ":
         sep_type_comma = False
         sep_type_linebreaks = False
         sep_type_curly = True
-        print("Setting Change: Processing alterations set to individuate generations by pipe bars.")
+        print("\nSetting Change: A copied grouping of generations will seperate themselves by | pipe bars.")
 #sep_type1
 sep_by_button_var = customtkinter.StringVar(value="    Pipe Bars    ")
 sep_by_button = customtkinter.CTkSegmentedButton(app, values=["     Pipe Bars     ", "     Commas     ", "    Line Breaks    "],
@@ -1354,6 +1889,7 @@ sep_by_button = customtkinter.CTkSegmentedButton(app, values=["     Pipe Bars   
                                                      unselected_hover_color = yellow,
                                                      selected_hover_color= green,
                                                      selected_color= '#325D88',
+                                                     text_color_disabled='black',
                                                      bg_color= bg,
                                                      width=200
                                                                                 )
@@ -1460,7 +1996,7 @@ x8= 0
 
 def update_diceword_listbox(event):
     global dynamic_height_scroll
-    max_display_items_small = 9  # Maximum number of items to display when there are fewer items
+    max_display_items_small = 8  # Maximum number of items to display when there are fewer items
     max_display_items_large = 22  # Maximum number of items to display when there are more items
     switch_to_large_list_limit = 15
 
@@ -1482,7 +2018,7 @@ def update_diceword_listbox(event):
     num_items = len(txt_files)
     if num_items < switch_to_large_list_limit:
         diceword_listbox.config(height=max_display_items_small)
-        listbox_scrollbar.place(height=167)
+        listbox_scrollbar.place(height=149)
     else:
         diceword_listbox.config(height=max_display_items_large)
         listbox_scrollbar.place(height=400)
@@ -1499,12 +2035,12 @@ lstbx_font = ('Nirmala UI', 10)
 
 # Listbox_A widget
 diceword_listbox = tk.Listbox(app, selectmode=tk.SINGLE, height=22, width=16, font=lstbx_font)
-diceword_listbox.place(x=xx+x8+100, y=yy+y8+140) #110 @ orig | x=71, y=140 |<--closer to scroll
+diceword_listbox.place(x=xx+x8+100, y=yy+y8+133) #110 @ orig | x=71, y=140 |<--closer to scroll
 
 # Create a Scrollbar widget
 dynamic_height_scroll = 300
 listbox_scrollbar = tk.Scrollbar(app, orient="vertical", command=diceword_listbox.yview)
-listbox_scrollbar.place(x=x8+71, y=y8+140, height=dynamic_height_scroll)
+listbox_scrollbar.place(x=x8+71, y=y8+133, height=dynamic_height_scroll)
 
 # Configure the Listbox_A widget to work with the Scrollbar
 diceword_listbox.config(yscrollcommand=listbox_scrollbar.set)
@@ -1519,7 +2055,7 @@ dicewords_dir = os.path.join(os.getcwd(), dicewords_folder) #dicewords_folder
 directories = [d for d in os.listdir(dicewords_dir) if os.path.isdir(os.path.join(dicewords_dir, d))]
 
 # Create a Scrollbar widget for listbox_B
-static_height_scroll = 132
+static_height_scroll = 130
 listbox_scrollbar_B = tk.Scrollbar(app, orient="vertical", command=more_directories_listbox.yview)
 listbox_scrollbar_B.place(x=71, y=627, height=static_height_scroll)
 more_directories_listbox.config(yscrollcommand=listbox_scrollbar_B.set)
@@ -1557,15 +2093,28 @@ selected_diceword = tk.StringVar()
 # Create a list to store directory names
 directory_names = []
 
-# Populate the list with directory names (similar to Listbox B)
-for directory in directories:
-    directory_name = os.path.basename(directory)
-    directory_name = directory_name.capitalize()  # Capitalize the first letter
-    directory_names.append(directory_name)
-
 # Create the Combobox widget and set its values
 directory_combobox = ttk.Combobox(app, values=directory_names, state="readonly")
-directory_combobox.place(x=xx + x8 + 71, y=yy + y8 + 90)
+directory_combobox.place(x=xx + x8 + 71, y=yy + y8 + 85)
+
+# Populate the list with directory names (similar to Listbox B)
+def populate_directories_combobox():
+    # Clear the current items in the combobox
+    directory_combobox['values'] = ()
+    
+    # Clear the list of directory names
+    directory_names.clear()
+    
+    for directory in directories:
+        directory_name = os.path.basename(directory)
+        directory_name = directory_name.capitalize()  # Capitalize the first letter
+        directory_names.append(directory_name)
+    
+    # Update the combobox with the new list of categories
+    directory_combobox['values'] = directory_names
+populate_directories_combobox()
+
+
 
 # Bind an event handler to update Listbox A when a selection is made in the Combobox
 def update_listbox_from_combobox(event):
@@ -1605,6 +2154,7 @@ def change_color_command(event=None):
             entry.tag_config('placeholder', background=None, foreground="#B4D862")
             entry.tag_add('placeholder', start, f"{end}+2c")
             start = f"{end}+2c"
+        
     
 def change_color(event=None):
     if event.widget == entry:
@@ -1651,6 +2201,204 @@ def on_folder_selection(event):
 
 more_directories_listbox.bind("<<ListboxSelect>>", on_folder_selection)
 
+#------------------------------------------------------------------------------------------------
+
+def refresh_all():
+    global dicewords_folder, additional_folders
+    refresh_word_lists_on_load(dicewords_folder)
+    refresh_word_lists()
+    refresh_word_lists_2(additional_folders)
+
+file_path_entry = tk.Entry(app)
+file_path_entry.config(width=41)
+file_path_entry.place(x=1234, y=650)
+
+def load_directory():
+    selected_directory = filedialog.askdirectory(initialdir=dicewords_folder)
+    
+    if selected_directory:
+        # Get the relative path
+        start_directory = 'dicewords'  # Change this to your starting directory
+        relative_path = os.path.relpath(selected_directory, start_directory)
+        
+        # Update the file_path_entry with the relative path
+        file_path_entry.delete(0, tk.END)
+        file_path_entry.insert(tk.END, relative_path)
+
+# Load Directory button
+load_directory_button = CTkButton(app, font=btn_font, corner_radius=0, bg_color=button_color, border_width=1, border_color=btn_border, hover_color=highlight_text, fg_color=button_color, text_color=text,
+                                  width=123.5, text="Load Directory", command=load_directory)
+load_directory_button.place(x=1234, y=600)
+
+# Load files on startup
+subdirectories_edit = [d for d in os.listdir(dicewords_folder) if os.path.isdir(os.path.join(dicewords_folder, d))]
+
+loaded_file_path = None
+# Load file function
+def load_file():
+    global loaded_file_path
+    # Use file dialog to get the file path
+    file_path = filedialog.askopenfilename(initialdir='dicewords', filetypes=[("Text files", "*.txt")])
+
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            content = f.read()
+            editor_textbox.delete("1.0", tk.END)  # Clear previous content
+            editor_textbox.insert(tk.END, f"{content}")
+
+            # Display relative path
+            start_directory = 'dicewords'  # Change this to your starting directory
+            directory_path = os.path.dirname(file_path)
+            relative_path = os.path.relpath(directory_path, start_directory)
+            file_name = os.path.basename(file_path)
+            file_path_display.delete(0, tk.END)
+            file_path_display.insert(tk.END, f"Directory: {relative_path} | File: {file_name}")
+
+            # Update the loaded_file_path variable
+            loaded_file_path = file_path
+
+    except FileNotFoundError:
+        print(f"File not found: {file_path}")
+    except UnicodeDecodeError as e:
+        print(f"Error decoding file {file_path}: {e}")
+
+# Save changes function
+def save_changes():
+    global loaded_file_path
+    try:
+        # Get the content from the editor_textbox
+        content_to_save = editor_textbox.get("1.0", tk.END)
+
+        if loaded_file_path:
+            # Save the changes to the loaded file path
+            with open(loaded_file_path, "w", encoding="utf-8") as f:
+                f.write(content_to_save)
+
+            print(f"Changes saved to: {loaded_file_path}")
+        else:
+            # If no file is loaded, prompt the user to choose a location
+            file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text files", "*.txt")])
+
+            if file_path:
+                # Save the changes to the chosen file path
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write(content_to_save)
+
+                print(f"Changes saved to: {file_path}")
+                # Update the loaded_file_path variable
+                loaded_file_path = file_path
+
+    except Exception as e:
+        print(f"Error saving changes: {e}")
+    refresh_all()
+
+def save_changes_as():
+    global loaded_file_path
+    try:
+        # Get the content from the editor_textbox
+        content_to_save = editor_textbox.get("1.0", tk.END)
+
+        # Prompt the user to choose a location
+        file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text files", "*.txt")])
+
+        if file_path:
+            # Save the changes to the chosen file path
+            with open(file_path, "w", encoding="utf-8") as f:
+                f.write(content_to_save)
+
+            print(f"Changes saved to: {file_path}")
+            # Update the loaded_file_path variable
+            loaded_file_path = file_path
+
+    except Exception as e:
+        print(f"Error saving changes: {e}")
+    refresh_all()
+
+# New function to create a new category (subdirectory)
+def create_new_category():
+    new_category = tk.simpledialog.askstring("Create New Category", "Enter the name of the new category:")
+    if new_category:
+        category_path = os.path.join(dicewords_folder, new_category)
+        os.makedirs(category_path, exist_ok=True)
+
+        directories.append(category_path)
+        directory_names.append(new_category.capitalize())
+
+        # Update both the Listbox and Combobox
+        more_directories_listbox.insert(tk.END, new_category.capitalize())
+        populate_directories_combobox()
+        
+        # Update the file path entry
+        file_path_entry.delete(0, tk.END)
+        file_path_entry.insert(tk.END, f"{category_path}")
+        refresh_all()
+    
+# New function to create a new DiceWord (text file)
+def create_new_diceword():
+    global loaded_file_path
+    new_diceword = tk.simpledialog.askstring("Create New DiceWord", "Enter the name of the new DiceWord:")
+    if new_diceword:
+        # Determine the category (current directory)
+        end_of_file_path = file_path_entry.get()
+        category = os.path.join(dicewords_folder, end_of_file_path)
+
+        # If the category ends with ".txt", remove it
+        if category.endswith(".txt"):
+            tk.simpledialog.messagebox.showerror("Error", "Ensure that only the category (directory) name is in the text field. A .txt file was detected.")
+            return
+            
+        # If the category is empty (no directory loaded), use the default directory "freshly_added"
+        if file_path_entry.get() == '':
+            category = os.path.join(dicewords_folder, "freshly added")
+
+        diceword_path = os.path.join(category, f"{new_diceword}.txt")
+
+        # Ensure the directory exists before creating the file
+        os.makedirs(os.path.dirname(diceword_path), exist_ok=True)
+
+        with open(diceword_path, "w", encoding="utf-8") as f:
+            f.write("")  # Write an empty string initially
+
+        # Update the file path entry
+        file_path_entry.delete(0, tk.END)
+        file_path_entry.insert(tk.END, f"{diceword_path}")
+        refresh_all()
+        file_path_display.delete(0, tk.END)
+        file_path_display.insert(tk.END, f"Directory: {end_of_file_path} | File: {new_diceword}")
+        editor_textbox.delete("1.0", tk.END)
+        loaded_file_path = diceword_path
+        
+
+
+
+file_path_display = tk.Entry(app)
+file_path_display.config(width=41)
+file_path_display.place(x=1234, y=150)
+
+editor_textbox = tk.Text(app, height=18, width=40, wrap="word")
+editor_textbox.place(x=xx+1234, y=yy+180)
+
+save_button = CTkButton(app, font=btn_font, corner_radius=0, bg_color=button_color, border_width=1, border_color=btn_border, hover_color=highlight_text, fg_color=button_color, text_color=text,
+                        width=87, text="Save Changes", command=lambda: save_changes())
+save_button.place(x=xx+1365, y=yy+116)
+
+save_as_button = CTkButton(app, font=btn_font, corner_radius=0, bg_color=button_color, border_width=1, border_color=btn_border, hover_color=highlight_text, fg_color=button_color, text_color=text,
+                           width= 75, text="Save As", command=save_changes_as)
+save_as_button.place(x=1452, y=116)
+
+load_button = CTkButton(app, font=btn_font, corner_radius=0, bg_color=button_color, border_width=1, border_color=btn_border, hover_color=highlight_text, fg_color=button_color, text_color=text,
+                        width=130, text="Load DiceWord", command=lambda: load_file())
+load_button.place(x=xx+1234, y=yy+116)
+
+# New buttons
+create_category_button = CTkButton(app, font=btn_font, corner_radius=0, bg_color=button_color, border_width=1, border_color=btn_border, hover_color=highlight_text, fg_color=button_color, text_color=text,
+                                   width=169, text="Create New Category", command=create_new_category)
+create_category_button.place(x=1358, y=600) #x=1400
+
+create_diceword_button = CTkButton(app, font=btn_font, corner_radius=0, bg_color=button_color, border_width=1, border_color=btn_border, hover_color=highlight_text, fg_color=button_color, text_color=text,
+                                   width=292, text="Create New DiceWord into Above Category", command=create_new_diceword)
+create_diceword_button.place(x=1234, y=700)
+
 
 
 #--------------------------------Copy, Induct, Refresh, Clear Input-----------------------------------
@@ -1658,12 +2406,14 @@ more_directories_listbox.bind("<<ListboxSelect>>", on_folder_selection)
 # COPY AND PROCESS #Search key: copy1
 
 copy_button = CTkButton(app, font=btn_font, corner_radius=0, bg_color=button_color, border_width=1, border_color=btn_border, hover_color=highlight_text, fg_color=button_color, text_color=text, 
+                        text_color_disabled= '#3F434A',
                         text="Process & Copy to Clipboard", width=297, command=copy_to_clipboard)
 copy_button.place(x=xx+x2+x7+891, y=yy+y2+y7+333) #(x=xx+858, y=yy+725)
 
 # CUPLET
 
 new_grouping_button = CTkButton(app, font=btn_font, corner_radius=0, bg_color=button_color, border_width=1, border_color=btn_border, hover_color=highlight_text, fg_color=button_color, text_color=text, 
+                                text_color_disabled= '#3F434A',
                                 text="Induct New Cuplet", width=150, command=new_cuplet)
 new_grouping_button.place(x =xx+x2+x7+740, y =yy+y2+y7+333) #628 orig
 
@@ -1671,7 +2421,7 @@ new_grouping_button.place(x =xx+x2+x7+740, y =yy+y2+y7+333) #628 orig
 # REFRESH BUTTON
 
 refresh_button = CTkButton(app, font=btn_font, corner_radius=0, bg_color=button_color, border_width=1, border_color=btn_border, hover_color=highlight_text, fg_color=button_color, text_color=text,
-                           text="Refresh .txt Files", width= 150, command=refresh_word_lists)
+                           text="Refresh .txt Files", width= 150, command=refresh_all)
 refresh_button.place(x=x8+70, y=y8+554)
 
 
@@ -1982,7 +2732,7 @@ randomize_genres_btn.place(x=xx+x5+715+35, y=yy+y5+132)
 
 #---------------------------------SAVE SETTINGS CACHE------------------------------------
 #----------------------------------------CACHE-------------------------------------------
-SETTINGS_CACHE_FILE = "assets/logs/settings_cache.txt"
+SETTINGS_CACHE_FILE = "prompts_and_text/settings_cache.txt"
 
 # Load settings from cache
 def load_settings_cache():
@@ -1998,16 +2748,28 @@ def save_settings_to_file():
         # Save genre settings
         settings_string = ''.join(str(var.get()) for var in genre_vars_index)
         file.write(f"genre_settings={settings_string}\n")
+
         # Save other settings
         file.write(f"sep_type_comma={sep_type_comma}\n")
         file.write(f"sep_type_linebreaks={sep_type_linebreaks}\n")
         file.write(f"sep_type_curly={sep_type_curly}\n")
         # Add more settings here
-        file.write(f"current_line={current_line}")
+        file.write(f"current_line={current_line}\n")
+        file.write(f"force_genres={force_genres.get()}\n")
+        # Save segmented_button setting
+        file.write(f"segmented_button={var_radio.get()}\n")
+        
+        file.write(f"fiction_realism_setting={fiction_realism_setting}\n")
+        file.write(f"sfw_nsfw_setting={sfw_nsfw_setting}\n")
+        file.write(f"gen_template_setting={gen_template_setting}\n")
+        file.write(f"rand_genre_setting={rand_genre_setting}\n")
+        file.write(f"individual_gen_ID={individual_gen_ID}\n")
+        file.write(f"gen_tag={gen_tag}")
 
 # New combined function to load all settings
 def load_settings_from_file():
-    global sep_type_comma, sep_type_linebreaks, sep_type_curly, current_line
+    global sep_type_comma, sep_type_linebreaks, sep_type_curly, current_line, force_genres, var_radio
+    global fiction_realism_setting, sfw_nsfw_setting, gen_template_setting, rand_genre_setting, gen_tag, individual_gen_ID
     try:
         with open(SETTINGS_CACHE_FILE, "r") as file:
             for line in file:
@@ -2022,17 +2784,41 @@ def load_settings_from_file():
                     sep_type_curly = value == "True"
                 if key == "current_line":
                     current_line = int(value)
-                    line_number_label.config(text=f"Line {current_line} of {len(template_lines)}")
-                # Add more settings here
-
+                    line_number_label.config(text=f"Input")
+                    app.after(1000, center_label)
+                if key == "force_genres":
+                    force_genres.set(value)
+                if key == "segmented_button":
+                    var_radio.set(value)
+                if key == "fiction_realism_setting":
+                    fiction_realism_setting = int(value)
+                    realism_slider.set(fiction_realism_setting)
+                if key == "sfw_nsfw_setting":
+                    sfw_nsfw_setting = int(value)
+                    maturity_slider.set(sfw_nsfw_setting)
+                if key == "gen_template_setting":
+                    gen_template_setting = int(value)
+                    gen_template_slider.set(gen_template_setting)
+                if key == "rand_genre_setting":
+                    rand_genre_setting = int(value)
+                    rand_genre_slider.set(rand_genre_setting)
+                if key == "individual_gen_ID":
+                    individual_gen_ID = int(value)
+            # After updating sliders, call update_settings
+                if key == "gen_tag":
+                    gen_tag = str(value)
+                    gen_tag_entry.delete('1.0', tk.END)
+                    gen_tag_entry.insert(tk.END, gen_tag)
     except FileNotFoundError:
         pass
+    
+
     
 def load_genre_settings(settings_string):
     for i, var in enumerate(genre_vars_index):
         var.set(int(settings_string[i]))
     if genre_vars_index[0].get() == 1:
-            selected_genres.append('sc')
+        selected_genres.append('sc')
     if genre_vars_index[1].get() == 1:
         selected_genres.append('fa')
     if genre_vars_index[2].get() == 1:
@@ -2060,7 +2846,10 @@ def load_genre_settings(settings_string):
         
 load_settings_from_file()
 #("Curly Braces")("Commas")("Line Breaks")
-#sep_type2
+#sep_type2\
+
+
+    
 if sep_type_curly:
     sep_by_button_var.set("     Pipe Bars     ")
 elif sep_type_comma:
@@ -2076,21 +2865,24 @@ engine = pyttsx3.init()
 voices = engine.getProperty('voices')
 
 
-with open("assets/logs/voice_choice.txt", "r") as voice_file:
+with open("prompts_and_text/voice_choice.txt", "r") as voice_file:
     voice_code = voice_file.read()
     exec(voice_code, globals(), locals())
 
 #-------------------------------Make button, TTS engine----------------------------
 
 def tts_callback(value):
-    global read_output_on_screen_tts
+    global read_output_on_screen_tts, play_msg, backspace
     if value == 'TTS On':
         print(value)
         read_output_on_screen_tts = True
+        play_msg.append('tts')
+        main_display_thread()
     elif value == 'TTS Off':
         print(value)
         read_output_on_screen_tts = False
-
+        backspace = True
+ 
 tts_button = customtkinter.CTkSegmentedButton(app, values=["TTS On", "TTS Off"],
                                                      unselected_color = text_panel_A,
                                                      fg_color= bg,
@@ -2102,7 +2894,7 @@ tts_button = customtkinter.CTkSegmentedButton(app, values=["TTS On", "TTS Off"],
                                                      command=tts_callback)
 
 tts_button.set("TTS Off")
-tts_button.place(x=x5+317,y=y5+307)
+tts_button.place(x=x5+357,y=y5+307)
 
 engine = pyttsx3.init()
 
@@ -2116,7 +2908,7 @@ def read_text(read_output_on_screen_tts):
     
     
 #---------------------------------SAVE TEMPLATE CACHE------------------------------------
-ALL_INPUT_TEMPLATES = "assets/logs/all_input_templates.txt"
+ALL_INPUT_TEMPLATES = "prompts_and_text/every_input_ever.txt"
 
 
 def load_from_all_input_templates():
@@ -2203,11 +2995,13 @@ sys.stderr = output_redirector
 
 def open_link(event):
     webbrowser.open("https://www.buymeacoffee.com/dicewords")
-link_label = ttk.Label(app, text="www.buymeacoffee.com/dicewords", background='black', foreground=dim_text, cursor="hand2")
+link_label = ttk.Label(app, text="Keep opensource free, fund us! A dollar will help! It takes hard work, it's not magic!", background='black', foreground='gray', cursor="hand2")
 link_label.place(x=990, y=737)
 
 # Bind a click event to open the link when clicked
 link_label.bind("<Button-1>", open_link)
+
+main_display_thread()
 
 app.mainloop()
 
