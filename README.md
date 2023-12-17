@@ -6,7 +6,7 @@ Hyponyms and hypernyms can be accessed through the same convention -- however, t
 Intro:
 
 
-DiceWords is a new way to more precisely work with dynamic prompting, and will be continuously updated and continuously unified with clean, well-created and curated user-contributed material.
+DiceWords is a new way to more precisely work with dynamic prompting, and will be occasionally updated and unified with clean, well-created and curated user-contributed material.
 If you'd like to help keep software like this free, please consider contributing a few cents. https://www.buymeacoffee.com/dicewords
 
 Another great way to keep the gates of open source open, is to give back, you can find/share DiceWords on our discord. 
