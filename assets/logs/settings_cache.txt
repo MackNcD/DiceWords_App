@@ -1,4 +1,0 @@
-genre_settings=011010101100
-sep_type_comma=False
-sep_type_linebreaks=True
-sep_type_curly=False

@@ -1,6 +1,0 @@
-New recruit! Welcome to the Geolinguistic Electro-mechanical Dice Word Manufacturing App. 
-This is the log area.
-Write a sentence in the entry area, making use of `backticks`, sandwich them around the words you'd like to randomize. A category list is provided, though you can create your own DiceWords.
-You can find find detailed instructions on how to assign parameter-sensitive words in the "Become a Geoliinguist" guide.
-This App is not free to use for commercial purposes. Ideas, offers, and expanded parametrical lists that you'd like to contribute--so they may become defaults--can be sent to the Dicewords GitHub.
- 
