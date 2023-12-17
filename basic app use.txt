@@ -6,46 +6,48 @@ Example:
 Input:
 ``pronoun`` was reading an ``noun``
 Output:
-I was read an instruction manual
+I was reading an instruction manual
 
-The DiceWord itself from which potentials from is a .txt file, within a directory [assets->dicewords->YOUR_DIRECTORY_HERE] and each line of the .txt file is another one of these potential words.
+The DiceWord itself from which potentials come from is a .txt file, within a directory [assets->dicewords->YOUR_DIRECTORY_HERE] and each line of the .txt file is another one of these potential words.
 
 
 DiceWord potentials each have a 3-4 part parametrical code following them.
-This is the DiceWord's PIP, or Partitioned Indication of Parameters, [named that because pips are the little dots on dice]
+This is the DiceWord's PIP, or Partitioned Indication of Parameters, 
+[named that because pips are the little dots on dice]
 
 The words will look something like this:
 
-word`g`f`nt
+apple`g`nf`nt
 
-You don't necessarily need the codes at the end of your words, but if you add them, they must have all three categories, in this arrangement:
-(word),(maturity level),(realism level),(genre)
+This means, the word is apple, the maturity rating is 'G', 
+it's non-fiction (nf), and it's nature themed (nt).
 
-Optionally, a second genre can be tacked on. More on that below.
-This strictness may be loosened in a later update.
+Take note of the symbol used to parse each part of the code.
+After version 1.2, the order and number of parameters used doesn't matter.
 
-Within the app, the first two settings (maturity/realism) are set by sliders, the last, genre, is set by a series of switches.
-If you're only interested in assigning a genre, or a pair of genres, you can pass the first two parameters through as (E) which means those sliders have no basis on your parameters.
+You don't necessarily need the codes at the end of your words, but they help specify results.
+
+
+Within the app, (maturity/realism) are set by sliders.
+Genres, by a series of switches.
 
 Code bank:
 
-Part 1: Maturity Levels
-E = 0-100
+Maturity Levels (Note: Where your slider is on the scale will be read out in-app)
 G = 0-50
 PG = 10-85
 M = 35-100
 R = 65-100
 X = 70-100 (With each additional X increasing the minimum by 10, up to three.)
 
-Part 2: Realism Levels
-E = 0-100
-NF (Non-fiction) = 0-55
-SF (Soft Fiction) = 10-85
-F (Fiction) = 45-100
+Realism Levels
+F = (Fiction) = 0-55
+SF = (Soft Fiction) = 10-85
+NF = (Non-Fiction) = 45-100
 
 Notice that there is great overlap in levels, these parameters are generally loose except at the extremes.
 
-Part 3: Primary Genre
+Genre:
 SC = Science Fiction
 FA = Fantasy
 HI = Historical
@@ -61,23 +63,35 @@ HO = Dark/Horrific
 
 More than one genre can be turned on at a time to mix things up.
 
-Part 4: Secondary Genre
-(List of possible PIPs are the same as part 3)
+Secondary Genre
+(List of possible genres, are the same as above.)
 
-How the first and second genre's influence is calculated on results:
-
-
-If there's a second genre listed in the diceword faces' parameter index, *and* this secondary genre has not been chosen by the user the secondary genre can potentially be disqualifying, with a 25% chance of doing so. So the primary genre more often than not has the weight of influence.
-
-If secondary genre is matched to the user's selection but it's primary is not, it will have a coin-flip, 50/50 odds, of passing through the parametrical gates.
+If you decide to list two genres, this is how the first and second genre's 
+influence is calculated on results:
 
 
-Selecting "Choose by paired genres" Will eliminate all single genre diceface from the polyhedral diceword. (Currently not implemented in version 1.0.0)
+If there's a second genre listed *and* this secondary genre's switch is not on,
+ the secondary genre can potentially be disqualifying, 
+ with a 25% chance of doing so. 
+ 
+ So the primary genre (first listed after the word) has the bulk of the influence.
+
+If a word has a secondary genre and it's flip is switched, but the first (primary) genre
+is turned off, it will be a coin-flip, 50/50 odds, if the word will be considered passable.
 
 
+Potentially coming later: Selecting "Choose by paired genres" 
+Will eliminate all single genre diceface 
+from the polyhedral diceword's selection mechanisms. (Currently not implemented in version 1.4)
 
-Don't forget that DiceWords can also be just be parts of words, to create fantasy words, and can also be entire phrases. However you want to customize the folders and their .txt files, is up to you. Just don't expect everything to make it into the default version if you send me the ideas -- it's important to keep things both plentiful and yet basic for a new user. But please send any changes, regardless.
+Information on settings will be displayed in the in-app cmd, so you can explore those at your
+leisure.
 
-If you like my platform please buy me a cup of coffee, I'm saving up for a new RAM stick so I can make programs like this -- more complex.
 
-Everything else can be figured out on your own -- please send any questions you have for me and I'll create a FAQ if certain things aren't clear. Experimenting should clear *most* things up. 
+Don't forget that DiceWords wasn't free for us to make, but it's free for you to have
+Help us give you more, vote with your dollar, for open source. 
+
+Link is in the bottom, right-hand corner of the app in title letters, so as to not be obnoxious.
+https://www.buymeacoffee.com/dicewords
+
+If there's anything I've missed, experimenting in the app should clear *most* things up. 

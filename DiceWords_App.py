@@ -167,12 +167,7 @@ def save_input():
             session_line = output_text.get("1.0", ttk.END)
             file.write(f"{session_line.strip()}\n")
     #------------------------------------------------------------
-    # Create or open the JSON file
-    # Specify the folder structure
-    folder_structure = ["prompts_and_text", "using_json"]
-
-    # Combine the folder structure and file name
-    json_file_path = os.path.join(*folder_structure, "generated_outputs.json")
+    json_file_path = os.path.join("prompts_and_text", "generated_outputs.json")
     if not os.path.exists(json_file_path):
         with open(json_file_path, 'w') as json_file:
             json.dump({}, json_file)
