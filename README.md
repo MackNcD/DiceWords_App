@@ -47,6 +47,4 @@ pip install -r requirements.txt
 ```
 This will install the dependancies. Then you can open main.py and run it in windows studio code.
 
-Ask for @Note, @MackNcD, or @Gille
-
-EDIT: There's doubles of the shapes files Austin
+Questions? Discord, ask for @MackNcD, @Gille, or @Note
