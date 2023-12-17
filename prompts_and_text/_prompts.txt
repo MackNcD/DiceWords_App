@@ -1,4 +1,5 @@
-A hyponym is subcatergory of a word. Generate a hyponym using this convention: >color
-A hypernym is supercatergory of a word. Generate a hypernym using this convention:: ^purple
-A synonym is word with a similar meaning to another word. Synonym output example: ~beautiful
-A DiceWord is what this program is all about, as it allows you creative flexibility and precision, on the fly. DiceWords are produced by surrounding a textfile (inspired by the famous 'wildcard') name in "backticks" -- a symbol often used for code demarcation. Output example: ``animal``
+You're an ``animal``, named ``pre````post``
+A hyponym is a subcatergory of a word. Generate a hyponym using this convention: >color
+A hypernym is supercatergory of a word. Generate a hypernym using this convention: ^purple
+A synonym is a word with a similar meaning to another word. Synonym output example: ~beautiful
+DiceWords are produced by surrounding user-generated textfiles (in the 'dicewords' directory) "backticks" -- a symbol often used for code demarcation. They will look like this: ``animal``
