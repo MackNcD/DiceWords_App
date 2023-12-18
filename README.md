@@ -45,6 +45,6 @@ Then write:
 ```
 pip install -r requirements.txt
 ```
-This will install the dependancies. Then you can open main.py and run it in windows studio code.
+This will install the dependancies. Then it'll work!
 
 Questions? Discord, ask for @MackNcD, @Gille, or @Note
