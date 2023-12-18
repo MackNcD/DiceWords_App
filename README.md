@@ -9,7 +9,7 @@ Intro:
 DiceWords is a new way to more precisely work with dynamic prompting, and will be occasionally updated and unified with clean, well-created and curated user-contributed material.
 If you'd like to help keep software like this free, remember someone has to make it, so consider joining the team. https://discord.gg/v73CFMVnV4
 
-Another great way to keep the gates of open source open, is to give back, please consider contributing at least a few cents, it'll add up for us. We have no investor, big office, or large GPU set up. Please drop a few cents in the jar. https://www.buymeacoffee.com/dicewords 
+
 
 
 Install instructions:
