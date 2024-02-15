@@ -91,7 +91,7 @@ session_tag = ''.join(random.sample(avail_chars, 2))
 individual_gen_ID = 0
 gen_tag = ''
 id_string = ''
-display_gen_ID = format(individual_gen_ID, '09_b')
+display_gen_ID = format(individual_gen_ID, '11_b')
 representative_string = '---------------------------------------------------'
 
 # Functions
@@ -104,8 +104,7 @@ def save_input():
     input_text = entry.get("1.0", ttk.END)
     
     individual_gen_ID += 1
-    if individual_gen_ID >= 4095: #1023
-        #gen_cuplet = ''.join(random.sample(avail_chars, 2))
+    if individual_gen_ID >= 8190:
         individual_gen_ID = 0
     display_gen_ID = format(individual_gen_ID,'09_b')
     gen_tag = gen_tag_entry.get("1.0", ttk.END)
@@ -117,21 +116,18 @@ def save_input():
             induct_new_cuplet = False
             number_of_gens -= (number_of_gens - 1)
             current_input = input_text
-         #xy_code = individual_gen_ID and gen_cuplet
             
             with open("prompts_and_text\logs.txt", 'a') as file:
-                if input_text.strip():  # Check if input_text is not empty
+                if input_text.strip():
                     file.write("    }\n\n")
-                    
-                    #file.write(f"  {representative_string}\n Generation Group User Tag: {gen_tag.strip()}\n Session Tag: {session_tag}\n Unique Cuplet Tag: {gen_cuplet}\n\n")
                     file.write(f"{representative_string}\n              Cuplet Code: {gen_tag.strip()}_{session_tag}-{gen_cuplet},\n             Gen: {gen_cuplet}-{gen_tag.strip()}_{display_gen_ID}\n{representative_string}")
                     file.write(f"\n{input_text.strip()}")
                     file.write(f"\n{representative_string}")
                     if not input_text.strip().endswith('\n'):
-                        file.write("\n")  # Ensure input_text ends with a newline
+                        file.write("\n")
                     file.write("    {\n")
                 log_text_add = output_text.get("1.0", ttk.END)
-                if log_text_add.strip():  # Check if log_text_add is not empty
+                if log_text_add.strip():
                     file.write("     " + log_text_add)
                     remove_last_curly_bracket(r"prompts_and_text\logs.txt")
                 update_log_text()
@@ -139,7 +135,7 @@ def save_input():
             remove_last_curly_bracket(r"prompts_and_text\logs.txt")
             with open("prompts_and_text\logs.txt", 'a') as file:
                 log_text_add = output_text.get("1.0", ttk.END)
-                if log_text_add.strip():  # Check if log_text_add is not empty
+                if log_text_add.strip():
                     file.write("    |\n     " + log_text_add)
                 file.write("    }\n")
                 update_log_text()
@@ -149,34 +145,38 @@ def save_input():
         remove_last_curly_bracket(r"prompts_and_text\logs.txt")
         with open("prompts_and_text\logs.txt", 'a') as file:
             log_text_add = output_text.get("1.0", ttk.END)
-            if log_text_add.strip():  # Check if log_text_add is not empty
+            if log_text_add.strip():
                 file.write("    |\n     " + log_text_add)
             file.write("    }\n")
             update_log_text()
     id_string = (f"Output ID: {gen_tag.strip()}-{session_tag}-{gen_cuplet}-{display_gen_ID}")
     update_log_text()
     app.after(0, update_gen_ID_label)
-     #----------------------------------------------------------
+    
     gen_tag = gen_tag.strip()
     session_file_path = f"prompts_and_text/tagged_prompt_outputs/{gen_tag}.txt"
     if not os.path.exists(session_file_path):
-        with open(session_file_path, 'w'): #automatically creates the file
+        with open(session_file_path, 'w'):
             print(f"Created new generation output session at tagged session: */sessions/{gen_tag}.txt")
     with open(session_file_path, 'a') as file:
-        if input_text.strip():  # Check if input_text is not empty
+        if input_text.strip():
             session_line = output_text.get("1.0", ttk.END)
             file.write(f"{session_line.strip()}\n")
-    #------------------------------------------------------------
-    json_file_path = os.path.join("prompts_and_text", "generated_outputs.json")
+    
+    json_file_path = os.path.join("prompts_and_text", "using_json", "generated_outputs.json")
+
     if not os.path.exists(json_file_path):
+        os.makedirs(os.path.dirname(json_file_path), exist_ok=True)  # Create directories if they don't exist
         with open(json_file_path, 'w') as json_file:
             json.dump({}, json_file)
 
-    # Read the existing data
     with open(json_file_path, 'r') as json_file:
-        data = json.load(json_file)
+        try:
+            data = json.load(json_file)
+        except json.decoder.JSONDecodeError:
+            print("Error decoding JSON. Initializing data as an empty dictionary.")
+            data = {}
 
-    # Add the generated output to the corresponding key
     if gen_tag not in data:
         data[gen_tag] = []
 
@@ -184,7 +184,6 @@ def save_input():
         session_line = output_text.get("1.0", ttk.END)
         data[gen_tag].append(session_line.strip())
 
-    # Write the updated data back to the JSON file
     with open(json_file_path, 'w') as json_file:
         json.dump(data, json_file, indent=2)
         
@@ -1259,7 +1258,7 @@ style = ttk.Style()
 style.map("TButton", background=[("active", "!disabled", light_blue)], borderwidth=[("active", -3), ("focus", -1)], bordercolor='black')
 style.configure("TButton", background=button_color, foreground=text, bordercolor=button_color, border_width=-2)
 
-app.geometry("1588x800")
+app.geometry("1230x864")
 app.config(bg=bg)
 
 # Create a canvas with a black background
@@ -1296,10 +1295,11 @@ def open_discord(event):
 
 discordImg = PhotoImage(file='assets/imgs/discord4.png')
 discordLabel = ttk.Label(text=None, image=discordImg, background='black', cursor="hand2")
-discordLabel.place(y=35, x=1485)
+discordLabel.place(y=70, x=1085)
 
 # Bind a click event to open the link when clicked
 discordLabel.bind("<Button-1>", lambda event: open_discord(event))
+
 
 
 
@@ -1418,8 +1418,8 @@ x7=120
 y7=0
 # Create a scrolled text widget for displaying the log1 logs1
 log_text = scrolledtext.ScrolledText(app, wrap=ttk.WORD, font=('Consolas', 11), 
-                                     width=52, height=11)
-log_text.place(x=xx+x2+x7+740, y=yy+y2+y7+120) #x=xx+730+48
+                                     width=52, height=16)
+log_text.place(x=xx+x2+x7+740, y=yy+y2+y7) #x=xx+730+48
 
 # Configure the background color
 log_text.configure(bg=bg, fg=light_purple, insertbackground=highlight_text)
@@ -1698,7 +1698,7 @@ style.configure("TProgressbar", foreground='black', background='red', thickness=
 
 progress_var = tk.DoubleVar()
 progress_bar = ttk.Progressbar(app, style="TProgressbar", variable=progress_var)
-progress_bar.place(x=xx+0, y=yy+770, relwidth=1)
+progress_bar.place(x=xx+0, y=yy+785, relwidth=1)
 #progress_bar.pack(fill="x") 
 
 #progress_bar.pack(side="bottom", fill="x")
@@ -1713,21 +1713,21 @@ add_sentence_button.place(x=xx+x5+715+35, y=yy+y5+237)
 x4=160 #500
 y4=362
 # Create output text widget, output1
-output_text = CTkTextbox(app, font=('Segoe UI Variable Small Semibold', 20),
+output_text = CTkTextbox(app, font=('Segoe UI Variable Small Semibold', 14),
                    #height=5, width=32,
                    corner_radius=0,
                    fg_color=bg,
                    text_color=light_blue, bg_color=text,
-                   width=454, height=118,
+                   width=214, height=248,
                    wrap="word")
-output_text.place(x=xx+x4+x7, y=yy+y4+y7)
+output_text.place(x=xx+x4+x7+710, y=yy+y4+y7-250)
 
 main_info = CTkTextbox(app, font=('Segoe UI Variable Small Semibold', 24),
                    #height=5, width=32,
                    corner_radius=0,
                    fg_color=bg,
                    text_color=light_blue, bg_color=text,
-                   width=500, height=50,
+                   width=420, height=50,
                    wrap="word")
 main_info.place(x=xx+782, y=yy+10) #x=xx+500, y=yy+10)
 
@@ -1789,12 +1789,12 @@ auto_copy_buttons = customtkinter.CTkSegmentedButton(app, values=
 
 auto_copy_buttons.place(x=x3+x5+281, y=y3+y5+312)
 
-#copy_last_button = CTkButton(app, font=btn_font, corner_radius=0, bg_color=button_color, border_width=1, 
- #                           border_color=btn_border, hover_color=highlight_text, 
- #                           fg_color=button_color, text_color=text, width=128,
- #                           text='Copy Last', command=copy_last_output_only, image=None)
-#copy_last_button.place(x=80, y=50)
-
+copy_last_button = CTkButton(app, font=btn_font, corner_radius=0, bg_color=button_color, border_width=1, 
+                           border_color=btn_border, hover_color=highlight_text, 
+                           fg_color=button_color, text_color=text, width=160, #width=448,
+                           text='Copy Last', command=copy_last_output_only, image=None)
+#copy_last_button.place(x=283, y=665)
+copy_last_button.place(x=75, y=50+yy)
 
 
 long_cuplets_btnvar = ttk.StringVar(value="Per Format")
@@ -2945,8 +2945,8 @@ entry.insert(ttk.END, cached_text)
 
 #----------------------------Output cmd1 on screen------------------------------------
                                                                             #25        #18
-out_text_cmd = ttk.ScrolledText(app, state=tk.DISABLED, wrap=tk.WORD, width=25, height=43, font=("Courier", 8))
-out_text_cmd.place(x=xx+990, y=yy+116) #(x=xx+934+48, y=yy+45) <-- closer to margin
+out_text_cmd = ttk.ScrolledText(app, state=tk.DISABLED, wrap=tk.WORD, width=25, height=23, font=("Courier", 8))
+out_text_cmd.place(x=xx+990, y=yy+376) #(x=xx+934+48, y=yy+45) <-- closer to margin
 
 
 # Function to update the output
@@ -2990,7 +2990,7 @@ sys.stderr = output_redirector
 
 def open_link(event):
     webbrowser.open("https://www.buymeacoffee.com/dicewords")
-link_label = ttk.Label(app, text="Keep opensource free, fund us! A dollar will help! It takes hard work, it's not magic!", background='black', foreground='gray', cursor="hand2")
+link_label = ttk.Label(app, text="Support the creator's future work", background='black', foreground='gray', cursor="hand2")
 link_label.place(x=990, y=737)
 
 # Bind a click event to open the link when clicked
