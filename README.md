@@ -9,7 +9,7 @@ Intro:
 
 
 DiceWords is a new way to more precisely work with dynamic prompting, and will be occasionally updated and unified with clean, well-created and curated user-contributed material.
-If you'd like to help keep software like this free, remember someone has to make it, so consider joining the team. https://discord.gg/v73CFMVnV4
+If you'd like to help design & implement new ideas and get a decent resume, consider joining the team. https://discord.gg/v73CFMVnV4
 
 
 
