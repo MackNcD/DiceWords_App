@@ -4,3 +4,4 @@ customtkinter==5.2.0
 darkdetect==0.8.0
 wordhoard==1.5.4
 pyttsx3==2.90
+sseclient
