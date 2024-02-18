@@ -1,4 +1,6 @@
 import os
+import requests
+import sseclient
 import random
 import re
 from PIL import ImageTk, Image
@@ -978,6 +980,38 @@ def refresh_word_lists_2(additional_folders):
 #-------Generate new sentence------
 #----------------------------------
 
+#NEW____
+llm_on = True
+#NEW____
+
+def check_api():
+    try:
+        url = "http://127.0.0.1:5000/v1/completions" 
+        response = requests.get(url)
+        
+        if response.status_code == 405:
+            print("API is available!")
+            return True
+        else:
+            print("API response:", response.status_code)
+            return False
+    except requests.exceptions.RequestException:
+            print("Error connecting to API")
+    return False
+
+        
+def switch_for_llm():
+    global llm_on
+  
+    if check_api() == True:
+        llm_on = True
+    else:
+        llm_on = False
+
+switch_for_llm()
+
+#_______________
+
 read_output_on_screen_tts = False
 fn_running = False
 backspace = False
@@ -1009,6 +1043,58 @@ def generate_loop():
         thread.start() #and causes it not to create delay (rotating cursor) in the main GUI
 
 
+def llm_function(new_sentence):
+    prefix = "Take everything I write below, reprint it, however; word it differently, use synonyms and create minor alterations. Keep the reprint brief, so it's about the length of the original or shorter. The text:"
+    prompt = new_sentence
+    prompt = f"{prefix}\n{prompt}"
+    prompt_smaller = new_sentence
+    print(prompt_smaller)
+    num_words = (len(prompt_smaller.split())  * 1.90)
+    
+    url = "http://127.0.0.1:5000/v1/completions"
+    headers = {
+        "Content-Type": "application/json"
+    }
+    
+    llm_index = {
+        'add_on_to_current_input_in_story_form_in_reply_box':'',
+        'create_a_list_of_names_like_the': '',
+        'create_a_list_of_ideas_like_this_one': '',
+        'use_reply_box_to_suggest_fresh_ideas': '',
+        'add_more_description': '',
+        'seperated_by_commas' : '',
+        'sense_from_nonsense' : '',
+        'fresh_words' : "The following is a data exchange with a AI Large Language Model. In this instance, the AI is playing the role of an editor for an author. The AI has been trained to intrepret what the user sends it, and then reprints that idea in different words. The AI improves the snappy flow of the author's drafts, rewording sentences for stylistic improvement, brevity and cleverness in description.  The user expects the revisions reprinted immediately without formalities or conversation.",
+        'creative_license' : "The following is a data exchange with a AI Large Language Model. In this instance, the AI is playing the role of a co-author and editor for user; the main author. The AI has been trained to intrepret what the user sends, and then reprints that idea in different words. Beyond following the original idea, the AI has a full creative license is some such should occur to it that would make for a very clever alteration. The AI improves the quality and flow of the author's drafts, rewording sentences for stylistic improvement, brevity in cleverness in description.  The user expects the revision reprinted immediately without formalities or conversation.",
+    }
+
+    
+    data = {
+        "context": llm_index['creative_license'],
+        "prompt": prompt,
+        "max_tokens": int(num_words),
+        "temperature": 0.98,
+        "top_p": 0.37,
+        "stream": True,
+    }
+    
+
+    stream_response = requests.post(url, headers=headers, json=data, verify=False, stream=True)
+  
+    client = sseclient.SSEClient(stream_response)
+
+    output_text.delete("1.0", tk.END)
+    # Loop through events inside function
+    for event in client.events():
+        payload = json.loads(event.data)
+        output_text.insert(tk.END, (payload['choices'][0]['text']).replace('\n', ' ').replace('The reprint:', ''))
+    
+    #print(payload)
+    #response = requests.post(url, headers=headers, json=data)
+    #print(response)
+    
+    #new_sentence = payload['choices'][0]['text']
+
 def generate_new_sentence(): #gen1 (for ctrl+f or 'find')
     global var_radio, number_of_gens,read_output_on_screen_tts, id_string, fn_running, backspace, play_msg, multiples, amt_left_gen
     print(f"Number of multiples = {amt_left_gen}")
@@ -1032,10 +1118,13 @@ def generate_new_sentence(): #gen1 (for ctrl+f or 'find')
             new_sentence = generate_sentence_variegated(input_sentence, word_lists, sfw_nsfw_setting, fiction_realism_setting, selected_genres, progress_var)
         
         new_sentence = process_text(new_sentence) #This directs all into process_text function
-        output_text.configure(state=tk.NORMAL)
-        output_text.delete("1.0", tk.END)  # Clear the current output
-        output_text.insert(tk.END, new_sentence)
-        output_text.configure(state=tk.DISABLED)
+        
+        output_text.delete("1.0", tk.END)  # (might want to bring this up higher on list)
+        if llm_on == True:
+            llm_function(new_sentence)
+        else:
+             output_text.insert(tk.END, new_sentence) 
+             
         if read_output_on_screen_tts == False:
             backspace = True
         save_input()
@@ -1052,6 +1141,9 @@ def generate_new_sentence(): #gen1 (for ctrl+f or 'find')
         if amt_left_gen > 0:
             multiples = True
             generate_multiple_sentences(amt_left_gen)
+            
+            
+
             
         
 with open("prompts_and_text/username.txt", "r") as name_file:
@@ -2203,6 +2295,7 @@ def refresh_all():
     refresh_word_lists_on_load(dicewords_folder)
     refresh_word_lists()
     refresh_word_lists_2(additional_folders)
+    switch_for_llm()
 
 file_path_entry = tk.Entry(app)
 file_path_entry.config(width=41)
@@ -2416,7 +2509,7 @@ new_grouping_button.place(x =xx+x2+x7+740, y =yy+y2+y7+333) #628 orig
 # REFRESH BUTTON
 
 refresh_button = CTkButton(app, font=btn_font, corner_radius=0, bg_color=button_color, border_width=1, border_color=btn_border, hover_color=highlight_text, fg_color=button_color, text_color=text,
-                           text="Refresh .txt Files", width= 150, command=refresh_all)
+                           text="Refresh .txt Files & APIs", width= 150, command=refresh_all)
 refresh_button.place(x=x8+70, y=y8+554)
 
 
