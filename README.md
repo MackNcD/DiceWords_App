@@ -1,5 +1,5 @@
 Update (1.5)
-DiceWords now automatically connects to text-generation-web-ui or 'oobabooga' -- set the 'api' extension to on, put your favorite creative model on, and a third randomizing process will occur on the backend through -- and quite quickly, even running on CPU. The number of tokens used is = to your initial prompt, it takes in the randomized prompt and randomizes it further, re-envisioning the described image.
+DiceWords now automatically connects to text-generation-web-ui or 'oobabooga' -- set the 'api' extension to on, put your favorite creative model on, and a third randomizing process will occur on the backend  -- and quite quickly, even running on CPU. The number of tokens used is = to your initial prompt, it takes in the randomized prompt and randomizes it further, re-envisioning the described image.
 
 
 Recent Update (1.4):
