@@ -1,3 +1,7 @@
+Update (1.5)
+DiceWords now automatically connects to text-generation-web-ui or 'oobabooga' -- set the 'api' extension to on, put your favorite creative model on, and a third randomizing process will occur on the backend through -- and quite quickly, even running on CPU. The number of tokens used is = to your initial prompt, it takes in the randomized prompt and randomizes it further, re-envisioning the described image.
+
+
 Recent Update (1.4):
 Synonyms can be accessed by adding a '~' before a word. Works great, but fair warning, if the word doesn't end with a space (i.e. -> .,!?) -- it's touch and go whether it's recognized as a real word.
 Hyponyms and hypernyms can be accessed through the same convention -- however, the activation symbols are obviously different -- '^' and '>' are their access triggers, respectively.
