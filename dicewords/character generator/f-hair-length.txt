@@ -1,0 +1,7 @@
+Short
+Chin-Length
+Shoulder-Length
+Mid-Back
+Waist-Length
+Hip-Length
+Floor-Length

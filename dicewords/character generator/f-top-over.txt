@@ -1,0 +1,38 @@
+Sweater
+Tunic
+Cardigan
+Kimono
+Blazer
+Jacket
+Coat
+Poncho
+Cape
+Shrugs
+Bolero
+Duster Coat
+Pea Coat
+Trench Coat
+Windbreaker
+Bomber Jacket
+Denim Jacket
+Leather Jacket
+Parka
+Anorak
+Raincoat
+Puffer Jacket
+Fleece Jacket
+Hoodie
+Sweatshirt
+Wrap Sweater
+Shawl
+
+Bolero Jacket with Fringe
+Steampunk Corset Vest
+Cocoon Coat
+Victorian Bustle Jacket
+Japanese Haori
+Moroccan Caftan
+Peruvian Alpaca Poncho
+Indian Sari Blouse
+Tibetan Chuba
+African Dashiki Kaftan
